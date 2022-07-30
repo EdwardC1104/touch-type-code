@@ -13,7 +13,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"],
+      "@public/*": ["public/*"],
+      "@styles/*": ["styles/*"],
+      "@database/*": ["database/*"]
+    },
+    "typeRoots": ["@types", "./node_modules/@types"],
+    "rootDir": ".",
+    "noImplicitAny": true,
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
