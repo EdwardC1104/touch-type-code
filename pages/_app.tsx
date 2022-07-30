@@ -1,16 +1,19 @@
 import "@styles/globals.scss";
 import type { AppProps } from "next/app";
-import { useEffect } from "react";
 import Layout from "@components/Layout";
+import Head from "next/head";
+import { SessionProvider } from "next-auth/react";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    document.querySelector("html")?.classList.add("dark");
-  });
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <SessionProvider>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SessionProvider>
   );
 }
 

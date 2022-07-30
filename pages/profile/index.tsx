@@ -1,8 +1,11 @@
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 
 const Profile: NextPage = () => {
+  const { data: session } = useSession();
+
   return (
     <>
       <Head>
@@ -10,6 +13,8 @@ const Profile: NextPage = () => {
       </Head>
       <div>
         <h1>Profile</h1>
+
+        <p>{JSON.stringify(session)}</p>
 
         <p>
           <Link href="profile/delete">delete</Link>

@@ -1,8 +1,12 @@
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const NavgiationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { status } = useSession();
 
   const router = useRouter();
 
@@ -17,18 +21,33 @@ const NavgiationBar = () => {
       href: "/pricing",
       isCTA: false,
     },
-    {
+  ];
+
+  if (status === "authenticated") {
+    links.push({
+      name: "Profile",
+      href: "/profile",
+      isCTA: false,
+    });
+
+    links.push({
+      name: "Logout",
+      href: "/api/auth/signout",
+      isCTA: false,
+    });
+  } else {
+    links.push({
       name: "Login",
       href: "/login",
       isCTA: false,
-    },
-    {
+    });
+
+    links.push({
       name: "Sign up",
       href: "/signup",
       isCTA: true,
-    },
-  ];
-
+    });
+  }
   const navigate = (href: string) => {
     router.push(href);
     setIsOpen(false);
@@ -91,10 +110,25 @@ const NavgiationBar = () => {
                   <button
                     key={link.name}
                     onClick={() => navigate(link.href)}
-                    className="font-medium text-white block bg-green-500 hover:bg-green-600 focus:bg-green-600 py-1.5 px-4 rounded-md text-center max-w-fit self-center"
+                    className="font-medium text-white block bg-green-600 hover:bg-green-700 focus:bg-green-700 py-1.5 px-4 rounded-md text-center max-w-fit self-center"
                   >
                     {link.name}
                   </button>
+                );
+              else if (link.href === "/api/auth/signout")
+                return (
+                  <Link href={link.href} key={link.name}>
+                    <a
+                      key={link.name}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        signOut();
+                      }}
+                      className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
+                    >
+                      {link.name}
+                    </a>
+                  </Link>
                 );
               else if (router.asPath !== link.href)
                 return (
