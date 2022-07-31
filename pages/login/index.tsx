@@ -1,22 +1,27 @@
-import Form from "@components/Form";
+import MyForm from "@components/Form";
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { FormEvent } from "react";
+import { Formik, Field, Form, FormikHelpers } from "formik";
+import { useRouter } from "next/router";
 
 const Login: NextPage = () => {
+  const router = useRouter();
+
   return (
     <>
       <Head>
         <title>Login</title>
       </Head>
       <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
-        <Form.Card>
-          <Form.Title>Login</Form.Title>
-          <Form.Subtitle>
+        <MyForm.Card>
+          <MyForm.Title>Login</MyForm.Title>
+          <MyForm.Subtitle>
             Enter your credentials to access your account.
-          </Form.Subtitle>
+          </MyForm.Subtitle>
           {/* <Form.SSO
             text="Login with Google"
             icon={
@@ -55,47 +60,79 @@ const Login: NextPage = () => {
             }
           /> */}
 
-          <Link href="/api/auth/signin">
-            <Form.SSO
-              text="Login with GitHub"
-              icon={
-                <Image
-                  src="/github.png"
-                  width={20}
-                  height={20}
-                  alt="GitHub Logo"
-                  className="self-center"
-                />
-              }
-              largeSpacing
-              onClick={(e) => {
-                e.preventDefault();
-                signIn("github", { callbackUrl: "/" });
-              }}
-            />
-          </Link>
+          <MyForm.SSO
+            text="Login with GitHub"
+            icon={
+              <Image
+                src="/github.png"
+                width={20}
+                height={20}
+                alt="GitHub Logo"
+                className="self-center"
+              />
+            }
+            largeSpacing
+            onClick={(e) => {
+              e.preventDefault();
+              signIn("github", { callbackUrl: "/" });
+            }}
+          />
 
-          <Form.Form>
-            <Form.Label htmlFor="username">Username</Form.Label>
-            <Form.Input
-              required
-              type="username"
-              name="username"
-              id="username"
-              placeholder="Enter a username"
-            />
-            <Form.Label htmlFor="password">Password</Form.Label>
-            <Form.Input
-              required
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter a password"
-              largeSpacing
-            />
-            <Form.Submit value="Login" />
-          </Form.Form>
-        </Form.Card>
+          <Formik
+            initialValues={{
+              username: "",
+              password: "",
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              const res = await signIn("credentials", {
+                callbackUrl: "/",
+                redirect: false,
+                ...values,
+              });
+
+              const { error, ok } = res;
+
+              setSubmitting(false);
+              if (ok) {
+                router.push("/");
+              } else {
+                alert(error);
+              }
+            }}
+          >
+            <Form>
+              <MyForm.Label htmlFor="username">Username</MyForm.Label>
+              <Field
+                required
+                type="username"
+                name="username"
+                id="username"
+                placeholder="Enter a username"
+                className={`rounded-xl border border-neutral-600 py-2 flex justify-center align-center px-3 bg-neutral-900 w-full text-neutral-400 placeholder:text-neutral-600 text-sm font-medium h-11 focus:outline-none focus:border-green-500 focus:border-1 focus:ring-green-500 focus:ring-1 transition-all ${
+                  false ? "mb-10" : "mb-5"
+                }`}
+              />
+              <MyForm.Label htmlFor="password">Password</MyForm.Label>
+              <Field
+                id="password"
+                name="password"
+                placeholder="Enter a password"
+                type="password"
+                required
+                className={`rounded-xl border border-neutral-600 py-2 flex justify-center align-center px-3 bg-neutral-900 w-full text-neutral-400 placeholder:text-neutral-600 text-sm font-medium h-11 focus:outline-none focus:border-green-500 focus:border-1 focus:ring-green-500 focus:ring-1 transition-all ${
+                  true ? "mb-10" : "mb-5"
+                }`}
+              />
+
+              {/* <MyForm.Submit value="Login" /> */}
+              <input
+                type="submit"
+                className="font-bold bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-xl text-center w-full h-11"
+                value={"Login"}
+              />
+            </Form>
+          </Formik>
+        </MyForm.Card>
       </div>
     </>
   );

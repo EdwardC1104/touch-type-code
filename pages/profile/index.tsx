@@ -1,11 +1,14 @@
-import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import type { GetServerSideProps, NextPage } from "next";
+import { unstable_getServerSession, User } from "next-auth";
 import Head from "next/head";
 import Link from "next/link";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
-const Profile: NextPage = () => {
-  const { data: session } = useSession();
+interface Props {
+  user: User;
+}
 
+const Profile: NextPage<Props> = ({ user }) => {
   return (
     <>
       <Head>
@@ -14,7 +17,7 @@ const Profile: NextPage = () => {
       <div>
         <h1>Profile</h1>
 
-        <p>{JSON.stringify(session)}</p>
+        <p>{JSON.stringify(user)}</p>
 
         <p>
           <Link href="profile/delete">delete</Link>
@@ -22,6 +25,29 @@ const Profile: NextPage = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      user: session.user,
+    },
+  };
 };
 
 export default Profile;

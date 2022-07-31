@@ -4,9 +4,9 @@ import Layout from "@components/Layout";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
