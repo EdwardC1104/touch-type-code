@@ -1,3 +1,4 @@
+import DatabaseConnection from "@database/DatabaseConnection";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -18,11 +19,9 @@ const Course: NextPage<Props> = ({ lessons }) => {
         <title>{courseName}</title>
       </Head>
       <div>
-        <h1>{courseName}</h1>
-
         {lessons.map((lesson) => (
           <p key={lesson}>
-            <Link href={`/catalog/${courseName}/${lesson}`}>{lesson}</Link>
+            <Link href={`/courses/${courseName}/${lesson}`}>{lesson}</Link>
           </p>
         ))}
       </div>
@@ -41,10 +40,15 @@ export async function getStaticProps() {
   };
 }
 
-const COURSES = ["javascript", "python", "html"];
-
 export async function getStaticPaths() {
-  const paths = COURSES.map((course) => `/catalog/${course}`);
+  const db = new DatabaseConnection();
+
+  const courses = await db.getCourses();
+
+  db.close();
+
+  const paths = courses.map((course) => `/courses/${course.name}`);
+
   return {
     paths,
     fallback: false,

@@ -1,4 +1,4 @@
-import { openDb } from "@database/db";
+import DatabaseConnection from "@database/DatabaseConnection";
 import { generatePassword } from "lib/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -12,61 +12,44 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  return new Promise<void>((resolve, reject) => {
-    if (req.method === "POST") {
-      const { name, username, password, email } = req.body;
+  if (req.method === "POST") {
+    const { name, username, password, email } = req.body;
 
-      console.log(req.body);
+    console.log(req.body);
 
-      if (!name || !username || !password || !email) {
-        res.status(400).json({
-          errors: [{ msg: "Missing required fields" }],
+    if (!name || !username || !password || !email) {
+      return res.status(400).json({
+        errors: [{ msg: "Missing required fields" }],
+      });
+    }
+
+    const { salt, hash } = generatePassword(req.body.password);
+
+    const db = new DatabaseConnection();
+
+    try {
+      await db.addUser({
+        name,
+        username,
+        passwordSalt: salt,
+        passwordHash: hash,
+        email,
+        isSSO: false,
+      });
+
+      return res.status(200).json({ errors: [] });
+    } catch (e: any) {
+      if (e.code === "SQLITE_CONSTRAINT") {
+        return res.status(400).json({
+          errors: [{ msg: "Username already taken" }],
         });
-        return resolve();
       }
 
-      const { salt, hash } = generatePassword(req.body.password);
-
-      const db = openDb();
-
-      db.get(
-        "SELECT * FROM users WHERE username = ?",
-        [username],
-        (err, row) => {
-          if (row) {
-            res
-              .status(400)
-              .json({ errors: [{ msg: "Username already taken" }] });
-            return resolve();
-          }
-
-          db.run(
-            "INSERT INTO users (name, username, passwordSalt, passwordHash, email, isSSO) VALUES ($name, $username, $passwordSalt, $passwordHash, $email, $isSSO)",
-            {
-              $name: name,
-              $username: username,
-              $email: email,
-              $passwordSalt: salt,
-              $passwordHash: hash,
-              $isSSO: 0,
-            },
-            (err) => {
-              db.close();
-              if (err) {
-                res
-                  .status(400)
-                  .json({ errors: [{ msg: "Something went wrong" }] });
-                return resolve();
-              }
-              res.status(200).json({ errors: [] });
-              return resolve();
-            }
-          );
-        }
-      );
-    } else {
-      res.status(405).json({ errors: [{ msg: "Method not allowed" }] });
-      return resolve();
+      return res.status(500).json({
+        errors: [{ msg: "Error adding user" }],
+      });
     }
-  });
+  } else {
+    return res.json({ errors: [{ msg: "Method not allowed" }] });
+  }
 }

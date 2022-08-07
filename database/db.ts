@@ -8,30 +8,42 @@ const openDb = (): sqlite3.Database => {
   db.serialize(() => {
     db.run(
       "CREATE TABLE IF NOT EXISTS users (\
-    id INTEGER PRIMARY KEY AUTOINCREMENT,\
-    name TEXT NOT NULL,\
-    username TEXT NOT NULL,\
-    email TEXT NOT NULL,\
-    passwordSalt TEXT NOT NULL,\
-    passwordHash TEXT NOT NULL,\
-    isSSO INTEGER NOT NULL\
-  )"
+          id INTEGER PRIMARY KEY AUTOINCREMENT,\
+          name TEXT NOT NULL,\
+          username TEXT NOT NULL UNIQUE,\
+          email TEXT NOT NULL,\
+          passwordSalt TEXT NOT NULL,\
+          passwordHash TEXT NOT NULL,\
+          isSSO INTEGER NOT NULL\
+        )"
     );
 
     db.run(
       "CREATE TABLE IF NOT EXISTS courses (\
-    id INTEGER PRIMARY KEY AUTOINCREMENT,\
-    name TEXT NOT NULL\
-  )"
+          id INTEGER PRIMARY KEY AUTOINCREMENT,\
+          name TEXT NOT NULL UNIQUE,\
+          description TEXT NOT NULL,\
+          image TEXT NOT NULL\
+        )"
     );
 
     db.run(
       "CREATE TABLE IF NOT EXISTS lessons (\
-    id INTEGER PRIMARY KEY AUTOINCREMENT,\
-    name TEXT NOT NULL,\
-    courseId INTEGER NOT NULL,\
-    FOREIGN KEY (courseId) REFERENCES courses(id)\
-  )"
+          id INTEGER PRIMARY KEY AUTOINCREMENT,\
+          name TEXT NOT NULL,\
+          courseId INTEGER NOT NULL,\
+          FOREIGN KEY (courseId) REFERENCES courses(id)\
+        )"
+    );
+
+    db.run(
+      "CREATE TABLE IF NOT EXISTS users_courses (\
+          id INTEGER PRIMARY KEY AUTOINCREMENT,\
+          userID INTEGER NOT NULL,\
+          courseId INTEGER NOT NULL,\
+          FOREIGN KEY (userID) REFERENCES users(id),\
+          FOREIGN KEY (courseId) REFERENCES courses(id)\
+        )"
     );
   });
 

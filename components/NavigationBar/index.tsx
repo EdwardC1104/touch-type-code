@@ -12,8 +12,8 @@ const NavgiationBar = () => {
 
   const links = [
     {
-      name: "Catalog",
-      href: "/catalog",
+      name: "Courses",
+      href: "/courses",
       isCTA: false,
     },
     {
@@ -32,7 +32,7 @@ const NavgiationBar = () => {
 
     links.push({
       name: "Logout",
-      href: "/api/auth/signout",
+      href: "/logout",
       isCTA: false,
     });
   } else {
@@ -115,7 +115,7 @@ const NavgiationBar = () => {
                     {link.name}
                   </button>
                 );
-              else if (link.href === "/api/auth/signout")
+              else if (link.href === "/logout")
                 return (
                   <Link href={link.href} key={link.name}>
                     <a
