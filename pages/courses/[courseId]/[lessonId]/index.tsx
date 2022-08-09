@@ -10,9 +10,9 @@ type CodeLetter = {
 };
 
 const codeText = `const styles = StyleSheet.create({container: {
-    flex: 1,
-    backgroundColor: "#262626",
-  },
+\t\tflex: 1,
+\t\tbackgroundColor: "#262626",
+\t},
 });`;
 
 const LessonText = ({ code }: { code: CodeLetter[] }) => {
@@ -28,12 +28,23 @@ const LessonText = ({ code }: { code: CodeLetter[] }) => {
             letterColor = "text-red-500 bg-red-900/30 rounded";
             break;
           case "CURRENT":
-            letterColor = "bg-blue-900/30 rounded";
+            letterColor = "bg-blue-900/50 rounded";
             break;
         }
+
+        let letterToDisplay = letter.letter;
+        switch (letter.letter) {
+          case "\t":
+            letterToDisplay = "  ";
+            break;
+          case "\n":
+            letterToDisplay = " \n";
+            break;
+        }
+
         return (
           <span key={index} className={letterColor}>
-            {letter.letter}
+            {letterToDisplay}
           </span>
         );
       })}
@@ -49,17 +60,30 @@ const Lesson: NextPage = () => {
 
   const reducer = (
     state: CodeLetter[],
-    action: { inputLetter: string }
+    action: { inputKey: string }
   ): CodeLetter[] => {
+    let inputLetter = action.inputKey;
+    switch (action.inputKey) {
+      case "Enter":
+        inputLetter = "\n";
+        break;
+    }
+    console.log(inputLetter);
+
     const currentIndex = state.findIndex(
       (letter) => letter.state === "CURRENT"
     );
     if (currentIndex === -1) return state;
 
-    if (currentIndex + 1 !== state.length)
-      state[currentIndex + 1].state = "CURRENT";
+    const numberOfCurrentLetters = state.reduce(
+      (acc, letter) => (letter.state === "CURRENT" ? acc + 1 : acc),
+      0
+    );
+    const nextIndex = state.findIndex((letter) => letter.state === "LATER");
+    if (numberOfCurrentLetters === 1 && nextIndex !== -1)
+      state[nextIndex].state = "CURRENT";
 
-    if (action.inputLetter === state[currentIndex].letter)
+    if (inputLetter === state[currentIndex].letter)
       return state.map((letter, index) => {
         if (index === currentIndex) return { ...letter, state: "CORRECT" };
 
@@ -76,16 +100,19 @@ const Lesson: NextPage = () => {
   const [code, dispatch] = useReducer(
     reducer,
     codeText.split("").map((letter, index): CodeLetter => {
+      let state: CodeLetter["state"] = "LATER";
+      if (index === 0) state = "CURRENT";
+      if (letter === "\t") state = "CORRECT";
       return {
         letter,
-        state: index === 0 ? "CURRENT" : "LATER",
+        state,
       };
     })
   );
 
   useEffect(() => {
     const onKeyPress = (event: KeyboardEvent) =>
-      dispatch({ inputLetter: event.key });
+      dispatch({ inputKey: event.key });
 
     window.addEventListener("keypress", onKeyPress);
     return () => window.removeEventListener("keypress", onKeyPress);
