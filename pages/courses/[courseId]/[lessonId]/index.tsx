@@ -137,6 +137,7 @@ const LESSONS = ["1", "2", "3", "4"];
 export async function getStaticProps() {
   return {
     props: {},
+    revalidate: 60,
   };
 }
 
