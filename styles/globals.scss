@@ -18,7 +18,8 @@ body,
   -moz-osx-font-smoothing: grayscale;
 }
 
-#__next {
+#__next,
+.top-level-div {
   display: flex;
   flex-direction: column;
   height: 100%;
