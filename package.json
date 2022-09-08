@@ -9,14 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/cookie": "^0.5.1",
+    "@types/cookies": "^0.7.7",
+    "cookie": "^0.5.0",
+    "cookies": "^0.8.0",
     "dotenv": "^16.0.1",
     "formik": "^2.2.9",
     "framer-motion": "^7.1.1",
     "next": "12.2.3",
-    "next-auth": "^4.10.2",
+    "next-connect": "^0.13.0",
+    "promised-sqlite3": "^1.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.54.0",
+    "sqlite": "^4.1.2",
     "sqlite3": "^5.0.10",
     "yup": "^0.32.11"
   },

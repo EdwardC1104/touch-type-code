@@ -1,4 +1,3 @@
-import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -6,7 +5,8 @@ import { useState } from "react";
 const NavgiationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { status } = useSession();
+  // const { status } = useSession();
+  const status = null;
 
   const router = useRouter();
 
@@ -122,7 +122,7 @@ const NavgiationBar = () => {
                       key={link.name}
                       onClick={(e) => {
                         e.preventDefault();
-                        signOut();
+                        // signOut();
                       }}
                       className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
                     >

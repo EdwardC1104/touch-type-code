@@ -2,12 +2,11 @@ import "@styles/globals.scss";
 import type { AppProps } from "next/app";
 import Layout from "@components/Layout";
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react";
 import Transition from "@components/Transition";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -16,7 +15,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           <Component {...pageProps} />
         </Transition>
       </Layout>
-    </SessionProvider>
+    </>
   );
 }
 

@@ -1,24 +1,32 @@
 import sqlite3 from "sqlite3";
+import { Database, open } from "sqlite";
 
 sqlite3.verbose();
 
 class DatabaseConnection {
-  private db: sqlite3.Database;
+  private db: Database<sqlite3.Database, sqlite3.Statement>;
 
   constructor() {
-    this.db = new sqlite3.Database("database/database.db");
-    this.initialiseTables();
-    this.addDevCourses();
+    this.openAndInitialise();
+  }
+
+  private async openAndInitialise() {
+    this.db = await open({
+      filename: "database/database.db",
+      driver: sqlite3.Database,
+    });
+
+    await this.initialiseTables();
+    await this.addDevCourses();
   }
 
   public close() {
     this.db.close();
   }
 
-  private initialiseTables() {
-    this.db.serialize(() => {
-      this.db.run(
-        "CREATE TABLE IF NOT EXISTS users (\
+  private async initialiseTables() {
+    await this.db.run(
+      "CREATE TABLE IF NOT EXISTS users (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL,\
           username TEXT UNIQUE,\
@@ -27,64 +35,64 @@ class DatabaseConnection {
           passwordHash TEXT,\
           isSSO INTEGER NOT NULL\
         )"
-      );
+    );
 
-      this.db.run(
-        "CREATE TABLE IF NOT EXISTS courses (\
+    await this.db.run(
+      "CREATE TABLE IF NOT EXISTS courses (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL UNIQUE,\
           description TEXT NOT NULL,\
           image TEXT NOT NULL\
         )"
-      );
+    );
 
-      this.db.run(
-        "CREATE TABLE IF NOT EXISTS lessons (\
+    await this.db.run(
+      "CREATE TABLE IF NOT EXISTS lessons (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL,\
           courseId INTEGER NOT NULL,\
           FOREIGN KEY (courseId) REFERENCES courses(id)\
         )"
-      );
+    );
 
-      this.db.run(
-        "CREATE TABLE IF NOT EXISTS users_courses (\
+    await this.db.run(
+      "CREATE TABLE IF NOT EXISTS users_courses (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           userID INTEGER NOT NULL,\
           courseId INTEGER NOT NULL,\
           FOREIGN KEY (userID) REFERENCES users(id),\
           FOREIGN KEY (courseId) REFERENCES courses(id)\
         )"
-      );
-    });
+    );
   }
 
-  private addDevCourses() {
-    this.db.all("SELECT * FROM courses", (err, rows) => {
-      if (err) return err;
+  private async addDevCourses() {
+    try {
+      const rows = await this.db.all("SELECT * FROM courses");
+
       if (rows.length === 0) {
-        this.db.serialize(() => {
-          this.addCourse({
-            name: "JavaScript",
-            description:
-              "Master the use of curly braces as well as greater-than and less-than signs in this symbol-heavy language.",
-            image: "/javascript.jpg",
-          });
-          this.addCourse({
-            name: "Python",
-            description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.",
-            image: "/python.png",
-          });
-          this.addCourse({
-            name: "Go",
-            description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.",
-            image: "/go.png",
-          });
+        await this.addCourse({
+          name: "JavaScript",
+          description:
+            "Master the use of curly braces as well as greater-than and less-than signs in this symbol-heavy language.",
+          image: "/javascript.jpg",
+        });
+        await this.addCourse({
+          name: "Python",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.",
+          image: "/python.png",
+        });
+        await this.addCourse({
+          name: "Go",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.",
+          image: "/go.png",
         });
       }
-    });
+    } catch (err) {
+      if (err) return err;
+    }
   }
 
   public addUser(user: UserData): Promise<UserData> {

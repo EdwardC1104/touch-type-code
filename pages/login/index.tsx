@@ -1,11 +1,8 @@
 import MyForm from "@components/Form";
-import type { GetServerSideProps, NextPage } from "next";
-import { getCsrfToken, signIn } from "next-auth/react";
+import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
-import { FormEvent } from "react";
-import { Formik, Field, Form, FormikHelpers } from "formik";
+import { Formik, Field, Form } from "formik";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -41,7 +38,7 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
             largeSpacing
             onClick={(e) => {
               e.preventDefault();
-              signIn("github", { callbackUrl: "/" });
+              // signIn("github", { callbackUrl: "/" });
             }}
           />
 
@@ -51,20 +48,18 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
               password: "",
             }}
             onSubmit={async (values, { setSubmitting }) => {
-              const res = await signIn("credentials", {
-                callbackUrl: "/",
-                redirect: false,
-                ...values,
-              });
-
-              const { error, ok } = res;
-
-              setSubmitting(false);
-              if (ok) {
-                router.push("/");
-              } else {
-                alert(error);
-              }
+              // const res = await signIn("credentials", {
+              //   callbackUrl: "/",
+              //   redirect: false,
+              //   ...values,
+              // });
+              // const { error, ok } = res;
+              // setSubmitting(false);
+              // if (ok) {
+              //   router.push("/");
+              // } else {
+              //   alert(error);
+              // }
             }}
           >
             <Form>

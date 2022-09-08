@@ -1,8 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { unstable_getServerSession, User } from "next-auth";
 import Head from "next/head";
 import Link from "next/link";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 interface Props {
   user: User;
@@ -28,26 +26,28 @@ const Profile: NextPage<Props> = ({ user }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  // const session = await unstable_getServerSession(
+  //   context.req,
+  //   context.res,
+  //   authOptions
+  // );
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
+  const session = null;
 
+  // if (!session) {
   return {
-    props: {
-      user: session.user,
+    redirect: {
+      destination: "/login",
+      permanent: false,
     },
   };
+  // }
+
+  // return {
+  //   props: {
+  //     user: session.user,
+  //   },
+  // };
 };
 
 export default Profile;
