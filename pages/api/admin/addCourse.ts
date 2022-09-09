@@ -1,7 +1,7 @@
 import { passwordIsValid } from "lib/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dotenv from "dotenv";
-import DatabaseConnection from "@database/DatabaseConnection";
+import Database from "@database/DatabaseConnection";
 
 dotenv.config({ path: ".env.local" });
 
@@ -39,7 +39,7 @@ export default async function handler(
     }
 
     try {
-      const db = new DatabaseConnection();
+      const db = new Database();
 
       await db.addCourse({
         name,

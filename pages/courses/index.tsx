@@ -1,4 +1,4 @@
-import DatabaseConnection from "@database/DatabaseConnection";
+import Database from "@database/DatabaseConnection";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -48,11 +48,7 @@ const Courses: NextPage<Props> = ({ courses }) => {
 };
 
 export async function getStaticProps() {
-  const db = new DatabaseConnection();
-
-  const courses = await db.getCourses();
-
-  db.close();
+  const courses = await Database.getCourses();
 
   return {
     props: {

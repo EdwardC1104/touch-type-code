@@ -1,4 +1,4 @@
-import DatabaseConnection from "@database/DatabaseConnection";
+import Database from "@database/DatabaseConnection";
 import { generatePassword } from "lib/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -25,16 +25,13 @@ export default async function handler(
 
     const { salt, hash } = generatePassword(req.body.password);
 
-    const db = new DatabaseConnection();
-
     try {
-      await db.addUser({
+      await Database.addUser({
         name,
         username,
         passwordSalt: salt,
         passwordHash: hash,
         email,
-        isSSO: false,
       });
 
       return res.status(200).json({ errors: [] });

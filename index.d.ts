@@ -10,11 +10,10 @@ interface Course extends CourseData {
 
 interface UserData {
   name: string;
-  username: string | null;
+  username: string;
   email: string;
-  passwordSalt: string | null;
-  passwordHash: string | null;
-  isSSO: boolean;
+  passwordSalt: string;
+  passwordHash: string;
 }
 
 interface User extends UserData {

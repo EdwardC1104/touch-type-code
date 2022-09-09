@@ -1,43 +1,41 @@
 import sqlite3 from "sqlite3";
-import { Database, open } from "sqlite";
+import sqlite from "sqlite";
 
 sqlite3.verbose();
 
-class DatabaseConnection {
-  private db: Database<sqlite3.Database, sqlite3.Statement>;
-
-  constructor() {
-    this.openAndInitialise();
-  }
-
-  private async openAndInitialise() {
-    this.db = await open({
-      filename: "database/database.db",
+class Database {
+  private static async open() {
+    const db = await sqlite.open({
+      filename: "./database/database.db",
       driver: sqlite3.Database,
     });
 
-    await this.initialiseTables();
-    await this.addDevCourses();
+    await this.initialiseTables(db);
+
+    return db;
   }
 
-  public close() {
-    this.db.close();
+  private static async close(
+    db: sqlite.Database<sqlite3.Database, sqlite3.Statement>
+  ) {
+    await db.close();
   }
 
-  private async initialiseTables() {
-    await this.db.run(
+  private static async initialiseTables(
+    db: sqlite.Database<sqlite3.Database, sqlite3.Statement>
+  ) {
+    await db.run(
       "CREATE TABLE IF NOT EXISTS users (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL,\
-          username TEXT UNIQUE,\
+          username TEXT NOT NULL UNIQUE,\
           email TEXT NOT NULL,\
-          passwordSalt TEXT,\
-          passwordHash TEXT,\
-          isSSO INTEGER NOT NULL\
+          passwordSalt TEXT NOT NULL,\
+          passwordHash TEXT NOT NULL\
         )"
     );
 
-    await this.db.run(
+    await db.run(
       "CREATE TABLE IF NOT EXISTS courses (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL UNIQUE,\
@@ -46,7 +44,7 @@ class DatabaseConnection {
         )"
     );
 
-    await this.db.run(
+    await db.run(
       "CREATE TABLE IF NOT EXISTS lessons (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL,\
@@ -55,7 +53,7 @@ class DatabaseConnection {
         )"
     );
 
-    await this.db.run(
+    await db.run(
       "CREATE TABLE IF NOT EXISTS users_courses (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
           userID INTEGER NOT NULL,\
@@ -66,91 +64,70 @@ class DatabaseConnection {
     );
   }
 
-  private async addDevCourses() {
-    try {
-      const rows = await this.db.all("SELECT * FROM courses");
+  public static async addUser(user: UserData): Promise<UserData> {
+    const db = await this.open();
 
-      if (rows.length === 0) {
-        await this.addCourse({
-          name: "JavaScript",
-          description:
-            "Master the use of curly braces as well as greater-than and less-than signs in this symbol-heavy language.",
-          image: "/javascript.jpg",
-        });
-        await this.addCourse({
-          name: "Python",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.",
-          image: "/python.png",
-        });
-        await this.addCourse({
-          name: "Go",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.",
-          image: "/go.png",
-        });
+    await db.run(
+      "INSERT INTO users (name, username, email, passwordSalt, passwordHash, isSSO) VALUES ($name, $username, $email, $passwordSalt, $passwordHash, $isSSO)",
+      {
+        $name: user.name,
+        $username: user.username,
+        $email: user.email,
+        $passwordSalt: user.passwordSalt,
+        $passwordHash: user.passwordHash,
       }
-    } catch (err) {
-      if (err) return err;
-    }
+    );
+
+    await this.close(db);
+
+    return user;
   }
 
-  public addUser(user: UserData): Promise<UserData> {
-    return new Promise((resolve, reject) => {
-      this.db.run(
-        "INSERT INTO users (name, username, email, passwordSalt, passwordHash, isSSO) VALUES ($name, $username, $email, $passwordSalt, $passwordHash, $isSSO)",
-        {
-          $name: user.name,
-          $username: user.username,
-          $email: user.email,
-          $passwordSalt: user.passwordSalt,
-          $passwordHash: user.passwordHash,
-          $isSSO: user.isSSO,
-        },
-        (err) => {
-          if (err) reject(err);
-          resolve(user);
-        }
-      );
+  public static async getUserById(id: number): Promise<UserData> {
+    const db = await this.open();
+
+    const row = await db.get("SELECT * FROM users WHERE id = $id", {
+      $id: id,
     });
+
+    await this.close(db);
+
+    return row;
   }
 
-  public getUserById(id: number): Promise<UserData> {
-    return new Promise((resolve, reject) => {
-      this.db.get(
-        "SELECT * FROM users WHERE id = $id",
-        { $id: id },
-        (err, row) => {
-          if (err) reject(err);
-          resolve(row);
-        }
-      );
+  public static async getUserByUsername(username: string): Promise<UserData> {
+    const db = await this.open();
+
+    const row = await db.get("SELECT * FROM users WHERE username = $username", {
+      $username: username,
     });
+
+    await this.close(db);
+
+    return row;
   }
 
-  public getCourses(): Promise<Course[]> {
-    return new Promise((resolve, reject) => {
-      this.db.all("SELECT * FROM courses", (err, rows) => {
-        if (err) reject(err);
-        resolve(rows);
-      });
-    });
+  public static async getCourses(): Promise<Course[]> {
+    const db = await this.open();
+
+    const rows = await db.all("SELECT * FROM courses");
+    return rows;
   }
 
-  public addCourse(course: CourseData): Promise<CourseData> {
-    return new Promise((resolve, reject) => {
-      const { name, description, image } = course;
+  public static async addCourse(course: CourseData): Promise<CourseData> {
+    const db = await this.open();
 
-      this.db.run(
-        "INSERT INTO courses (name, description, image) VALUES (?, ?, ?)",
-        [name, description, image],
-        (err) => {
-          if (err) reject(err);
-          resolve(course);
-        }
-      );
-    });
+    const { name, description, image } = course;
+
+    await db.run(
+      "INSERT INTO courses (name, description, image) VALUES (?, ?, ?)",
+      [name, description, image]
+    );
+
+    await this.close(db);
+
+    return course;
   }
 }
 
-export default DatabaseConnection;
+export default Database;

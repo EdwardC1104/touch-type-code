@@ -1,4 +1,4 @@
-import DatabaseConnection from "@database/DatabaseConnection";
+import Database from "@database/DatabaseConnection";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -138,11 +138,7 @@ export async function getStaticProps() {
 }
 
 export async function getStaticPaths() {
-  const db = new DatabaseConnection();
-
-  const courses = await db.getCourses();
-
-  db.close();
+  const courses = await Database.getCourses();
 
   const paths = courses.map((course) => `/courses/${course.name}`);
 
