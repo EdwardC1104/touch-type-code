@@ -4,7 +4,7 @@ interface Props {
 }
 
 const Label = ({ htmlFor, children }: Props) => (
-  <label htmlFor={htmlFor} className="font-bold mb-1">
+  <label htmlFor={htmlFor} className="font-bold leading-loose">
     {children}
   </label>
 );

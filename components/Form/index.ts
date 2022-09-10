@@ -6,6 +6,7 @@ import SSO from "./SSO";
 import Subtitle from "./Subtitle";
 import Title from "./Title";
 import Card from "./Card";
+import ErrorMessage from "./ErrorMessage";
 
 const toExport = {
   Submit,
@@ -16,6 +17,7 @@ const toExport = {
   Subtitle,
   Title,
   Card,
+  ErrorMessage,
 };
 
 export default toExport;

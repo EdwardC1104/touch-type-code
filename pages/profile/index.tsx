@@ -13,6 +13,17 @@ interface Props {
 }
 
 const Profile: NextPage<Props> = ({ user }) => {
+  const router = useRouter();
+
+  const deleteAccount = async () => {
+    const res = await fetch("/api/user/delete", {
+      method: "DELETE",
+    });
+    if (res.status === 200) {
+      router.push("/");
+    }
+  };
+
   return (
     <>
       <Head>
@@ -23,9 +34,12 @@ const Profile: NextPage<Props> = ({ user }) => {
 
         <p>{JSON.stringify(user)}</p>
 
-        <p>
-          <Link href="profile/delete">delete</Link>
-        </p>
+        <button
+          onClick={deleteAccount}
+          className="font-medium text-white block bg-red-600 hover:bg-red-700 focus:bg-red-700 py-1.5 px-4 rounded-md text-center max-w-fit self-center"
+        >
+          Delete Account
+        </button>
       </div>
     </>
   );

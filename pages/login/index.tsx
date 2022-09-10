@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Formik, Field, Form } from "formik";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface Props {
   csrfToken: string;
@@ -11,6 +12,8 @@ interface Props {
 
 const Login: NextPage<Props> = ({ csrfToken }) => {
   const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState(`\u00a0`);
 
   return (
     <>
@@ -58,7 +61,10 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
               setSubmitting(false);
               if (res.status === 200) {
                 router.push("/");
-              } else alert("Invalid credentials");
+              } else {
+                const data = await res.json();
+                setErrorMessage(data.error);
+              }
             }}
           >
             <Form>
@@ -90,6 +96,7 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
                 className="font-bold bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-xl text-center w-full h-11"
                 value={"Login"}
               />
+              <MyForm.ErrorMessage>{errorMessage}</MyForm.ErrorMessage>
             </Form>
           </Formik>
         </MyForm.Card>

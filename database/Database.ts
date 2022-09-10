@@ -83,6 +83,16 @@ class Database {
     return user;
   }
 
+  public static async deleteUser(id: number): Promise<void> {
+    const db = await this.open();
+
+    await db.run("DELETE FROM users WHERE id = $id", {
+      $id: id,
+    });
+
+    await this.close(db);
+  }
+
   public static async getUserById(id: number): Promise<User> {
     const db = await this.open();
 

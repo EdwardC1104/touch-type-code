@@ -5,9 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Signup: NextPage = () => {
   const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState(`\u00a0`);
 
   return (
     <>
@@ -64,7 +67,7 @@ const Signup: NextPage = () => {
               if (ok) {
                 router.push("/");
               } else {
-                alert(JSON.stringify(json));
+                setErrorMessage(json.error);
               }
             }}
           >
@@ -118,6 +121,7 @@ const Signup: NextPage = () => {
                 className="font-bold bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-xl text-center w-full h-11"
                 value={"Sign up"}
               />
+              <MyForm.ErrorMessage>{errorMessage}</MyForm.ErrorMessage>
             </Form>
           </Formik>
         </MyForm.Card>
