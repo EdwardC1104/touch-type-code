@@ -1,4 +1,4 @@
-import Database from "@database/DatabaseConnection";
+import Database from "database/Database";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";

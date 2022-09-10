@@ -1,4 +1,4 @@
-import NavgiationBar from "@components/NavigationBar";
+import NavgiationBar from "components/NavigationBar";
 import Head from "next/head";
 
 interface Props {

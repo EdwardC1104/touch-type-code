@@ -1,4 +1,4 @@
-import MyForm from "@components/Form";
+import MyForm from "components/Form";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -24,7 +24,7 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
             Enter your credentials to access your account.
           </MyForm.Subtitle>
 
-          <MyForm.SSO
+          {/* <MyForm.SSO
             text="Login with GitHub"
             icon={
               <Image
@@ -40,7 +40,7 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
               e.preventDefault();
               // signIn("github", { callbackUrl: "/" });
             }}
-          />
+          /> */}
 
           <Formik
             initialValues={{
@@ -48,18 +48,17 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
               password: "",
             }}
             onSubmit={async (values, { setSubmitting }) => {
-              // const res = await signIn("credentials", {
-              //   callbackUrl: "/",
-              //   redirect: false,
-              //   ...values,
-              // });
-              // const { error, ok } = res;
-              // setSubmitting(false);
-              // if (ok) {
-              //   router.push("/");
-              // } else {
-              //   alert(error);
-              // }
+              const res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(values),
+              });
+              setSubmitting(false);
+              if (res.status === 200) {
+                router.push("/");
+              } else alert("Invalid credentials");
             }}
           >
             <Form>

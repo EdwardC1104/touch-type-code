@@ -16,11 +16,14 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@pages/*": ["pages/*"],
-      "@components/*": ["components/*"],
-      "@public/*": ["public/*"],
-      "@styles/*": ["styles/*"],
-      "@database/*": ["database/*"]
+      // "@pages/*": ["pages/*"],
+      // "components/*": ["components/*"],
+      // "@public/*": ["public/*"],
+      // "@styles/*": ["styles/*"],
+      // "database/*": ["database/*"],
+      // "@hooks/*": ["hooks/*"],
+      // "context/*": ["context/*"],
+      // "@lib/*": ["lib/*"]
     },
     "typeRoots": ["@types", "./node_modules/@types"],
     "rootDir": ".",

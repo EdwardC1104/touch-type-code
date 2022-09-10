@@ -1,8 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import MyForm from "@components/Form";
+import MyForm from "components/Form";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
@@ -22,7 +21,7 @@ const Signup: NextPage = () => {
             Enter your credentials to create an account.
           </MyForm.Subtitle>
 
-          <Link href="/api/auth/signin">
+          {/* <Link href="/api/auth/signin">
             <MyForm.SSO
               text="Sign up with GitHub"
               icon={
@@ -37,10 +36,10 @@ const Signup: NextPage = () => {
               largeSpacing
               onClick={(e) => {
                 e.preventDefault();
-                signIn("github", { callbackUrl: "/" });
+                // signIn("github", { callbackUrl: "/" });
               }}
             />
-          </Link>
+          </Link> */}
 
           <Formik
             initialValues={{
@@ -59,14 +58,11 @@ const Signup: NextPage = () => {
               });
 
               const json = await res.json();
-
-              console.log(res, json);
-
               const { ok } = res;
 
               setSubmitting(false);
               if (ok) {
-                router.push("/login");
+                router.push("/");
               } else {
                 alert(JSON.stringify(json));
               }

@@ -1,6 +1,7 @@
-import Database from "@database/DatabaseConnection";
+import Database from "database/Database";
 import { generatePassword } from "lib/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
+import login from "./login";
 
 type Data = {
   errors: {
@@ -14,8 +15,6 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { name, username, password, email } = req.body;
-
-    console.log(req.body);
 
     if (!name || !username || !password || !email) {
       return res.status(400).json({
@@ -34,9 +33,10 @@ export default async function handler(
         email,
       });
 
-      return res.status(200).json({ errors: [] });
+      return login(req, res);
     } catch (e: any) {
       if (e.code === "SQLITE_CONSTRAINT") {
+        console.error(e);
         return res.status(400).json({
           errors: [{ msg: "Username already taken" }],
         });

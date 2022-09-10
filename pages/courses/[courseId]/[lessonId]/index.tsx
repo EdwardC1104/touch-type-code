@@ -1,4 +1,4 @@
-import Database from "@database/DatabaseConnection";
+import Database from "database/Database";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -68,7 +68,6 @@ const Lesson: NextPage = () => {
         inputLetter = "\n";
         break;
     }
-    console.log(inputLetter);
 
     const currentIndex = state.findIndex(
       (letter) => letter.state === "CURRENT"

@@ -1,6 +1,12 @@
-import type { GetServerSideProps, NextPage } from "next";
+import Database from "database/Database";
+import useSession from "hooks/useSession";
+import { getCookie } from "lib/cookies";
+import { getServerSession } from "lib/getServerSession";
+import { verifyJWT } from "lib/jwt";
+import type { GetServerSideProps, NextApiRequest, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Props {
   user: User;
@@ -25,29 +31,21 @@ const Profile: NextPage<Props> = ({ user }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // const session = await unstable_getServerSession(
-  //   context.req,
-  //   context.res,
-  //   authOptions
-  // );
-
-  const session = null;
-
-  // if (!session) {
-  return {
-    redirect: {
-      destination: "/login",
-      permanent: false,
-    },
-  };
-  // }
-
-  // return {
-  //   props: {
-  //     user: session.user,
-  //   },
-  // };
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const user = await getServerSession(req);
+  if (user)
+    return {
+      props: {
+        user,
+      },
+    };
+  else
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
 };
 
 export default Profile;

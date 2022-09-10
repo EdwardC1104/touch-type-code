@@ -1,11 +1,11 @@
 import sqlite3 from "sqlite3";
-import sqlite from "sqlite";
+import sqlite, { open } from "sqlite";
 
 sqlite3.verbose();
 
 class Database {
   private static async open() {
-    const db = await sqlite.open({
+    const db = await open({
       filename: "./database/database.db",
       driver: sqlite3.Database,
     });
@@ -68,7 +68,7 @@ class Database {
     const db = await this.open();
 
     await db.run(
-      "INSERT INTO users (name, username, email, passwordSalt, passwordHash, isSSO) VALUES ($name, $username, $email, $passwordSalt, $passwordHash, $isSSO)",
+      "INSERT INTO users (name, username, email, passwordSalt, passwordHash) VALUES ($name, $username, $email, $passwordSalt, $passwordHash)",
       {
         $name: user.name,
         $username: user.username,
@@ -83,7 +83,7 @@ class Database {
     return user;
   }
 
-  public static async getUserById(id: number): Promise<UserData> {
+  public static async getUserById(id: number): Promise<User> {
     const db = await this.open();
 
     const row = await db.get("SELECT * FROM users WHERE id = $id", {
@@ -95,7 +95,7 @@ class Database {
     return row;
   }
 
-  public static async getUserByUsername(username: string): Promise<UserData> {
+  public static async getUserByUsername(username: string): Promise<User> {
     const db = await this.open();
 
     const row = await db.get("SELECT * FROM users WHERE username = $username", {

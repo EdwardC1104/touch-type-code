@@ -1,3 +1,4 @@
+import useSession from "hooks/useSession";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -5,8 +6,7 @@ import { useState } from "react";
 const NavgiationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // const { status } = useSession();
-  const status = null;
+  const { session } = useSession();
 
   const router = useRouter();
 
@@ -23,7 +23,7 @@ const NavgiationBar = () => {
     },
   ];
 
-  if (status === "authenticated") {
+  if (session) {
     links.push({
       name: "Profile",
       href: "/profile",
@@ -120,9 +120,12 @@ const NavgiationBar = () => {
                   <Link href={link.href} key={link.name}>
                     <a
                       key={link.name}
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.preventDefault();
-                        // signOut();
+                        await fetch("/api/auth/logout", {
+                          method: "POST",
+                        });
+                        router.reload();
                       }}
                       className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
                     >
