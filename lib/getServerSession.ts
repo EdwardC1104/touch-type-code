@@ -10,17 +10,21 @@ type Request = IncomingMessage & {
   }>;
 };
 
+/**
+ * Uses the JWT in the request to find the user's id.
+ * Then, it gets the user's data from the database.
+ */
 export const getServerSession = async (req: Request) => {
   let token = getCookie(req as NextApiRequest, "jwt");
-  if (!token) return null;
+  if (!token) return null; // No token, no session
 
   const { sub: id } = verifyJWT(token);
-  if (!id) return null;
+  if (!id) return null; // Invalid token, no session
 
   const user = await Database.getUserById(parseInt(id));
-  if (!user) return null;
+  if (!user) return null; // User not found, no session
 
-  const userData = {
+  const userData: UserSession = {
     id: user.id,
     name: user.name,
     username: user.username,

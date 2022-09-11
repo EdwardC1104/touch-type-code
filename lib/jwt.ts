@@ -30,7 +30,7 @@ const issueJWT = (id: number) => {
  * Token should be in the form "Bearer <token>".
  */
 const verifyJWT = (token: string) => {
-  const tokenContents = token.split(" ")[1];
+  const tokenContents = token.split(" ")[1]; // Remove "Bearer " from token
 
   return jsonwebtoken.verify(tokenContents, PUBLIC_KEY, {
     algorithms: ["RS256"],

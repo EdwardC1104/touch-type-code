@@ -4,6 +4,11 @@ import { passwordIsValid } from "lib/passwords";
 import { issueJWT } from "lib/jwt";
 import { setCookie } from "lib/cookies";
 
+/**
+ * API endpoint for logging in a user.
+ * Expects a JSON body with the user's username and password.
+ * @method POST
+ */
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });

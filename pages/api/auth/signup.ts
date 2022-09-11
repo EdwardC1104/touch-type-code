@@ -7,6 +7,11 @@ type Data = {
   error: string;
 };
 
+/**
+ * API endpoint for signing up a new user.
+ * Expects a JSON body with the user's name, username, email, and password.
+ * @method POST
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -16,11 +21,10 @@ export default async function handler(
 
   const { name, username, password, email } = req.body;
 
-  if (!name || !username || !password || !email) {
+  if (!name || !username || !password || !email)
     return res.status(400).json({
       error: "Missing required fields",
     });
-  }
 
   const { salt, hash } = generatePassword(req.body.password);
 
@@ -33,7 +37,7 @@ export default async function handler(
       email,
     });
 
-    return login(req, res);
+    return login(req, res); // Log the user in after signing up
   } catch (e: any) {
     if (e.code === "SQLITE_CONSTRAINT")
       return res.status(400).json({

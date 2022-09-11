@@ -1,3 +1,11 @@
 import { createContext } from "react";
 
-export const SessionContext = createContext<any>(null);
+type Session = {
+  status: "loading" | "authenticated" | "unauthenticated";
+  userSession: UserSession | null;
+};
+
+export const SessionContext = createContext<Session>({
+  status: "unauthenticated",
+  userSession: null,
+});

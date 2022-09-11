@@ -9,38 +9,34 @@ interface Props {
 export default function SessionProvider({ children }: Props) {
   const router = useRouter();
 
-  const [session, setSession] = useState<{} | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [userSession, setUserSession] = useState<UserSession | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchSession = async () => {
     setLoading(true);
-    const res = await fetch("/api/user/session", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch("/api/user/session", { method: "GET" }); // Fetch session from endpoint
 
     if (res.ok) {
-      const { session } = await res.json();
-      setSession(session);
-    } else {
-      setErrorMessage("Failed to fetch session");
-    }
+      const { session } = await res.json(); // Get session from response
+      setUserSession(session); // This may be a valid session or null if no session exists
+    } else setUserSession(null); // Error fetching session
+
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchSession();
+    fetchSession(); // Fetch session on mount and every time the url changes
   }, [router.asPath]);
 
-  if (errorMessage) return <p>{errorMessage}</p>;
+  const status = loading
+    ? "loading"
+    : userSession
+    ? "authenticated"
+    : "unauthenticated";
 
-  const status = loading ? "loading" : session ? "loggedIn" : "loggedOut";
   return (
-    <SessionContext.Provider value={{ status, session }}>
-      <SessionContext.Consumer>{(ctx) => children}</SessionContext.Consumer>
+    <SessionContext.Provider value={{ status, userSession }}>
+      <SessionContext.Consumer>{() => children}</SessionContext.Consumer>
     </SessionContext.Provider>
   );
 }

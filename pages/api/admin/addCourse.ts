@@ -10,6 +10,10 @@ type Data = {
   message?: string;
 };
 
+/**
+ * API endpoint for creating a new course.
+ * Expects a JSON body with the course's name, description, image and adminPassword.
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>

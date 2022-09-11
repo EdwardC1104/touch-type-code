@@ -6,7 +6,7 @@ import { useState } from "react";
 const NavgiationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { session } = useSession();
+  const { userSession } = useSession();
 
   const router = useRouter();
 
@@ -23,7 +23,10 @@ const NavgiationBar = () => {
     },
   ];
 
-  if (session) {
+  // I check whether the user is logged in using the 'userSession' value and not the
+  // 'status' value because the 'status' may be "loading" which causes flickering on every
+  // url change. The 'userSession' value could be stale but this isn't an issue here.
+  if (userSession) {
     links.push({
       name: "Profile",
       href: "/profile",

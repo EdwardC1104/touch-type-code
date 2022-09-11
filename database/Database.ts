@@ -4,6 +4,10 @@ import sqlite, { open } from "sqlite";
 sqlite3.verbose();
 
 class Database {
+  /**
+   * Opens a connection to the database.
+   * @returns The database connection.
+   */
   private static async open() {
     const db = await open({
       filename: "./database/database.db",
@@ -15,12 +19,18 @@ class Database {
     return db;
   }
 
+  /**
+   * Closes the database connection.
+   */
   private static async close(
     db: sqlite.Database<sqlite3.Database, sqlite3.Statement>
   ) {
     await db.close();
   }
 
+  /**
+   * Creates the tables if they don't exist.
+   */
   private static async initialiseTables(
     db: sqlite.Database<sqlite3.Database, sqlite3.Statement>
   ) {
@@ -64,6 +74,9 @@ class Database {
     );
   }
 
+  /**
+   * Creates a new user in the database and returns the user's data.
+   */
   public static async addUser(user: UserData): Promise<UserData> {
     const db = await this.open();
 
@@ -83,6 +96,9 @@ class Database {
     return user;
   }
 
+  /**
+   * Deletes a user from the database by their id.
+   */
   public static async deleteUser(id: number): Promise<void> {
     const db = await this.open();
 
@@ -93,6 +109,9 @@ class Database {
     await this.close(db);
   }
 
+  /**
+   * Returns a given user found by their id.
+   */
   public static async getUserById(id: number): Promise<User> {
     const db = await this.open();
 
@@ -105,6 +124,9 @@ class Database {
     return row;
   }
 
+  /**
+   * Returns a given user found by their username.
+   */
   public static async getUserByUsername(username: string): Promise<User> {
     const db = await this.open();
 
@@ -117,6 +139,9 @@ class Database {
     return row;
   }
 
+  /**
+   * Returns all the courses in the database.
+   */
   public static async getCourses(): Promise<Course[]> {
     const db = await this.open();
 
@@ -124,6 +149,9 @@ class Database {
     return rows;
   }
 
+  /**
+   * Creates a new course in the database and returns the course's data.
+   */
   public static async addCourse(course: CourseData): Promise<CourseData> {
     const db = await this.open();
 

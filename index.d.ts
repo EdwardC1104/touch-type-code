@@ -19,3 +19,10 @@ interface UserData {
 interface User extends UserData {
   id: number;
 }
+
+interface UserSession {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+}
