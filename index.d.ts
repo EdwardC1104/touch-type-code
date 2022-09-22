@@ -1,11 +1,7 @@
-interface CourseData {
+interface Course {
   name: string;
   description: string;
   image: string;
-}
-
-interface Course extends CourseData {
-  id: number;
 }
 
 interface UserData {
@@ -25,4 +21,21 @@ interface UserSession {
   name: string;
   username: string;
   email: string;
+}
+
+interface LessonData {
+  name: string;
+  description: string;
+  background: string;
+  courseName: number;
+  content: string;
+}
+interface Lesson extends LessonData {
+  id: number;
+
+  // Data stored in the user_lesson table
+  rating?: 0 | 1 | 2 | 3 | 4 | 5;
+  dateStarted?: string;
+  wps?: number;
+  accuracy?: number;
 }
