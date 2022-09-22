@@ -17,7 +17,7 @@ const Courses: NextPage<Props> = ({ courses }) => {
       <div className="flex items-center flex-col">
         {courses?.map((course) => (
           <div
-            key={course.id}
+            key={course.name}
             className="bg-neutral-900 rounded-xl p-4 sm:w-[30rem] w-full my-4 drop-shadow-lg flex"
           >
             <div className="self-center flex rounded-md">
