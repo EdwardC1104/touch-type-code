@@ -1,11 +1,6 @@
-import Database from "database/Database";
-import useSession from "hooks/useSession";
-import { getCookie } from "lib/cookies";
 import { getServerSession } from "lib/getServerSession";
-import { verifyJWT } from "lib/jwt";
 import type { GetServerSideProps, NextApiRequest, NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -16,12 +11,8 @@ const Profile: NextPage<Props> = ({ user }) => {
   const router = useRouter();
 
   const deleteAccount = async () => {
-    const res = await fetch("/api/user/delete", {
-      method: "DELETE",
-    });
-    if (res.status === 200) {
-      router.push("/");
-    }
+    const res = await fetch("/api/user/delete", { method: "DELETE" });
+    if (res.status === 200) router.push("/");
   };
 
   return (
@@ -30,9 +21,9 @@ const Profile: NextPage<Props> = ({ user }) => {
         <title>Profile</title>
       </Head>
       <div>
-        <h1>Profile</h1>
-
-        <p>{JSON.stringify(user)}</p>
+        <p>Name: {user.name}</p>
+        <p>Email: {user.email}</p>
+        <p>Username: {user.username}</p>
 
         <button
           onClick={deleteAccount}
