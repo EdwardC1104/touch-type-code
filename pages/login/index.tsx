@@ -60,7 +60,7 @@ const Login: NextPage<Props> = ({ csrfToken }) => {
               });
               setSubmitting(false);
               if (res.status === 200) {
-                router.push("/");
+                router.push("/courses");
               } else {
                 const data = await res.json();
                 setErrorMessage(data.error);

@@ -65,7 +65,7 @@ const Signup: NextPage = () => {
 
               setSubmitting(false);
               if (ok) {
-                router.push("/");
+                router.push("/courses");
               } else {
                 setErrorMessage(json.error);
               }
