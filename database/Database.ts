@@ -56,13 +56,13 @@ class Database {
     // The lesson name and courseName form a composite primary key.
     await db.run(
       "CREATE TABLE IF NOT EXISTS lesson (\
+          id INTEGER PRIMARY KEY AUTOINCREMENT,\
           name TEXT NOT NULL,\
           description TEXT NOT NULL,\
           courseName TEXT NOT NULL,\
           background TEXT NOT NULL,\
           content TEXT NOT NULL,\
-          FOREIGN KEY (courseName) REFERENCES course(name),\
-          PRIMARY Key (name, courseName)\
+          FOREIGN KEY (courseName) REFERENCES course(name)\
         )"
     );
 
@@ -220,8 +220,8 @@ class Database {
         FROM lesson\
         LEFT JOIN user_lesson\
         ON lesson.id = user_lesson.lessonId\
-        WHERE user_lesson.userId = $userId\
-        AND courseName = $courseName",
+        AND user_lesson.userId = $userId\
+        WHERE courseName = $courseName",
         {
           $userId: userId,
           $courseName: courseName,
@@ -235,7 +235,7 @@ class Database {
         FROM lesson\
         LEFT JOIN user_lesson\
         ON lesson.id = user_lesson.lessonId\
-        WHERE user_lesson.userId = $userId",
+        AND user_lesson.userId = $userId",
         {
           $userId: userId,
         }
