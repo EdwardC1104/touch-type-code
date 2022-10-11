@@ -16,17 +16,23 @@ const NavgiationBar = () => {
       href: "/courses",
       isCTA: false,
     },
-    {
-      name: "Pricing",
-      href: "/pricing",
-      isCTA: false,
-    },
+    // {
+    //   name: "Pricing",
+    //   href: "/pricing",
+    //   isCTA: false,
+    // },
   ];
 
   // I check whether the user is logged in using the 'userSession' value and not the
   // 'status' value because the 'status' may be "loading" which causes flickering on every
   // url change. The 'userSession' value could be stale but this isn't an issue here.
   if (userSession) {
+    links.push({
+      name: "Dashboard",
+      href: "/dashboard",
+      isCTA: false,
+    });
+
     links.push({
       name: "Profile",
       href: "/profile",
