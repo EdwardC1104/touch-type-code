@@ -35,79 +35,80 @@ class Database {
     db: sqlite.Database<sqlite3.Database, sqlite3.Statement>
   ) {
     await db.run(
-      "CREATE TABLE IF NOT EXISTS user (\
-          id INTEGER PRIMARY KEY AUTOINCREMENT,\
-          name TEXT NOT NULL,\
-          username TEXT NOT NULL UNIQUE,\
-          email TEXT NOT NULL,\
-          passwordSalt TEXT NOT NULL,\
-          passwordHash TEXT NOT NULL\
-        )"
+      "CREATE TABLE IF NOT EXISTS userTbl (\
+        id INTEGER PRIMARY KEY AUTOINCREMENT,\
+        name TEXT NOT NULL,\
+        username TEXT NOT NULL UNIQUE,\
+        email TEXT NOT NULL UNIQUE,\
+        passwordSalt TEXT NOT NULL,\
+        passwordHash TEXT NOT NULL\
+      );"
     );
 
     await db.run(
-      "CREATE TABLE IF NOT EXISTS course (\
-          name TEXT PRIMARY KEY,\
-          description TEXT NOT NULL,\
-          image TEXT NOT NULL\
-        )"
+      "CREATE TABLE IF NOT EXISTS courseTbl (\
+        name TEXT PRIMARY KEY,\
+        description TEXT NOT NULL,\
+        image TEXT NOT NULL\
+      );"
     );
 
     // The lesson name and courseName form a composite primary key.
     await db.run(
-      "CREATE TABLE IF NOT EXISTS lesson (\
-          id INTEGER PRIMARY KEY AUTOINCREMENT,\
-          name TEXT NOT NULL,\
-          description TEXT NOT NULL,\
-          courseName TEXT NOT NULL,\
-          background TEXT NOT NULL,\
-          content TEXT NOT NULL,\
-          FOREIGN KEY (courseName) REFERENCES course(name)\
-        )"
+      "CREATE TABLE IF NOT EXISTS lessonTbl (\
+        id INTEGER PRIMARY KEY AUTOINCREMENT,\
+        name TEXT NOT NULL,\
+        description TEXT NOT NULL,\
+        courseName TEXT NOT NULL,\
+        background TEXT NOT NULL,\
+        content TEXT NOT NULL,\
+        FOREIGN KEY (courseName) REFERENCES courseTbl(name),\
+        UNIQUE(name, courseName)\
+      );"
     );
 
     await db.run(
-      "CREATE TABLE IF NOT EXISTS user_course (\
-          dateStarted TEXT NOT NULL,\
-          userId INTEGER NOT NULL,\
-          courseName TEXT NOT NULL,\
-          FOREIGN KEY (userID) REFERENCES user(id),\
-          FOREIGN KEY (courseName) REFERENCES course(name),\
-          PRIMARY Key (userId, courseName)\
-        )"
+      "CREATE TABLE IF NOT EXISTS userCourseTbl (\
+        dateStarted TEXT NOT NULL,\
+        userId INTEGER NOT NULL,\
+        courseName TEXT NOT NULL,\
+        FOREIGN KEY (userId) REFERENCES userTbl(id),\
+        FOREIGN KEY (courseName) REFERENCES courseTbl(name),\
+        PRIMARY KEY (userId, courseName)\
+      );"
     );
 
     await db.run(
-      "CREATE TABLE IF NOT EXISTS user_lesson (\
-          dateStarted TEXT NOT NULL,\
-          userId INTEGER NOT NULL,\
-          lessonId INTEGER NOT NULL,\
-          rating INTEGER NOT NULL,\
-          wps INTEGER NOT NULL,\
-          accuracy REAL NOT NULL,\
-          FOREIGN KEY (userID) REFERENCES user(id),\
-          FOREIGN KEY (lessonId) REFERENCES lesson(id),\
-          PRIMARY Key (userId, lessonId)\
-        )"
+      "CREATE TABLE IF NOT EXISTS userLessonTbl (\
+        dateStarted TEXT NOT NULL,\
+        userId INTEGER NOT NULL,\
+        lessonId INTEGER NOT NULL,\
+        rating INTEGER NOT NULL,\
+        wps INTEGER NOT NULL,\
+        accuracy REAL NOT NULL,\
+        FOREIGN KEY (userId) REFERENCES userTbl(id),\
+        FOREIGN KEY (lessonId) REFERENCES lessonTbl(id),\
+        PRIMARY Key (userId, lessonId)\
+      );"
     );
 
     await db.run(
-      "CREATE TABLE IF NOT EXISTS character (\
+      "CREATE TABLE IF NOT EXISTS characterTbl (\
           symbol TEXT PRIMARY KEY\
         )"
     );
 
     await db.run(
-      "CREATE TABLE IF NOT EXISTS user_character (\
-          id INTEGER PRIMARY KEY AUTOINCREMENT,\
-          timesCorrect INTEGER NOT NULL,\
-          timesIncorrect INTEGER NOT NULL,\
-          averageTimeToType REAL NOT NULL,\
-          userId INTEGER NOT NULL,\
-          characterSymbol TEXT NOT NULL,\
-          FOREIGN KEY (userID) REFERENCES user(id),\
-          FOREIGN KEY (characterSymbol) REFERENCES character(symbol)\
-        )"
+      "CREATE TABLE IF NOT EXISTS userCharacterTbl (\
+        id INTEGER PRIMARY KEY AUTOINCREMENT,\
+        timesCorrect INTEGER NOT NULL,\
+        timesIncorrect INTEGER NOT NULL,\
+        averageTimeToType REAL NOT NULL,\
+        userId INTEGER NOT NULL,\
+        characterSymbol TEXT NOT NULL,\
+        FOREIGN KEY (userId) REFERENCES userTbl(id),\
+        FOREIGN KEY (characterSymbol) REFERENCES characterTbl(symbol)\
+      );"
     );
   }
 
@@ -118,7 +119,7 @@ class Database {
     const db = await this.open();
 
     await db.run(
-      "INSERT INTO user (name, username, email, passwordSalt, passwordHash) VALUES ($name, $username, $email, $passwordSalt, $passwordHash)",
+      "INSERT INTO userTbl (name, username, email, passwordSalt, passwordHash) VALUES ($name, $username, $email, $passwordSalt, $passwordHash)",
       {
         $name: user.name,
         $username: user.username,
@@ -139,7 +140,7 @@ class Database {
   public static async deleteUser(id: number): Promise<void> {
     const db = await this.open();
 
-    await db.run("DELETE FROM user WHERE id = $id", {
+    await db.run("DELETE FROM userTbl WHERE id = $id", {
       $id: id,
     });
 
@@ -152,7 +153,7 @@ class Database {
   public static async getUserById(id: number): Promise<User> {
     const db = await this.open();
 
-    const row = await db.get("SELECT * FROM user WHERE id = $id", {
+    const row = await db.get("SELECT * FROM userTbl WHERE id = $id", {
       $id: id,
     });
 
@@ -167,9 +168,12 @@ class Database {
   public static async getUserByUsername(username: string): Promise<User> {
     const db = await this.open();
 
-    const row = await db.get("SELECT * FROM user WHERE username = $username", {
-      $username: username,
-    });
+    const row = await db.get(
+      "SELECT * FROM userTbl WHERE username = $username",
+      {
+        $username: username,
+      }
+    );
 
     await this.close(db);
 
@@ -182,7 +186,7 @@ class Database {
   public static async getCourses(): Promise<Course[]> {
     const db = await this.open();
 
-    const rows = await db.all("SELECT * FROM course");
+    const rows = await db.all("SELECT * FROM courseTbl");
     return rows;
   }
 
@@ -195,7 +199,7 @@ class Database {
     const { name, description, image } = course;
 
     await db.run(
-      "INSERT INTO course (name, description, image) VALUES (?, ?, ?)",
+      "INSERT INTO courseTbl (name, description, image) VALUES (?, ?, ?)",
       [name, description, image]
     );
 
@@ -217,10 +221,10 @@ class Database {
     if (courseName && userId)
       return await db.all(
         "SELECT *\
-        FROM lesson\
-        LEFT JOIN user_lesson\
-        ON lesson.id = user_lesson.lessonId\
-        AND user_lesson.userId = $userId\
+        FROM lessonTbl\
+        LEFT JOIN userLessonTbl\
+        ON lessonTbl.id = userLessonTbl.lessonId\
+        AND userLessonTbl.userId = $userId\
         WHERE courseName = $courseName",
         {
           $userId: userId,
@@ -232,10 +236,10 @@ class Database {
     if (userId)
       return await db.all(
         "SELECT *\
-        FROM lesson\
-        LEFT JOIN user_lesson\
-        ON lesson.id = user_lesson.lessonId\
-        AND user_lesson.userId = $userId",
+        FROM lessonTbl\
+        LEFT JOIN userLessonTbl\
+        ON lessonTbl.id = userLessonTbl.lessonId\
+        AND userLessonTbl.userId = $userId",
         {
           $userId: userId,
         }
@@ -244,14 +248,14 @@ class Database {
     // Gets all the lessons with the given course name.
     if (courseName)
       return await db.all(
-        "SELECT * FROM lesson WHERE courseName = $courseName",
+        "SELECT * FROM lessonTbl WHERE courseName = $courseName",
         {
           $courseName: courseName,
         }
       );
 
     // Gets all the lessons.
-    return await db.all("SELECT * FROM lesson");
+    return await db.all("SELECT * FROM lessonTbl");
   }
 
   /**
@@ -263,7 +267,7 @@ class Database {
     const { name, background, content, courseName, description } = lesson;
 
     await db.run(
-      "INSERT INTO lesson (name, background, content, courseName, description) VALUES ($name, $background, $content, $courseName, $description)",
+      "INSERT INTO lessonTbl (name, background, content, courseName, description) VALUES ($name, $background, $content, $courseName, $description)",
       {
         $name: name,
         $background: background,
