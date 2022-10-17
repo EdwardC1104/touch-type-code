@@ -39,7 +39,10 @@ const LessonText = ({ code }: { code: CodeLetter[] }) => {
         }
 
         return (
-          <span key={index} className={letterColor}>
+          <span
+            key={index}
+            className={`${letterColor} transition-all duration-100 ease-in-out`}
+          >
             {letterToDisplay}
           </span>
         );
