@@ -47,7 +47,7 @@ const DataCard = ({
           <div className="flex-1 flex items-center">
             {rating ? (
               <div className="flex justify-center flex-1">
-                <Rating value={value} />
+                <Rating value={value} size="medium" />
               </div>
             ) : (
               <p className="text-5xl font-medium">

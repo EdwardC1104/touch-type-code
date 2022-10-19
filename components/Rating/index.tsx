@@ -1,8 +1,9 @@
 interface Props {
   value: number;
+  size: "small" | "medium" | "large";
 }
 
-const Rating = ({ value }: Props) => {
+const Rating = ({ value, size }: Props) => {
   const mouths = [
     <path
       key="1"
@@ -27,13 +28,16 @@ const Rating = ({ value }: Props) => {
 
   const starState: boolean[] = Array(5).fill(false).fill(true, 0, value);
 
+  const sizeMultiplier = size === "small" ? 0.5 : size === "medium" ? 1 : 3;
+
   return (
-    <div className="grid grid-cols-5 gap-[5px]">
+    <div className="grid grid-cols-5 gap-[6px]">
       {starState.map((active, index) => (
         <svg
           key={`gold-${index}`}
-          width={34}
-          height={33}
+          width={34 * sizeMultiplier}
+          height={33 * sizeMultiplier}
+          viewBox="0 0 34 33"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
