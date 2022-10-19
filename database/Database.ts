@@ -259,6 +259,24 @@ class Database {
   }
 
   /**
+   * Gets the specified lesson from the database by using the unique combination of course name and lesson name.
+   */
+  public static async getLesson(
+    courseName: string,
+    lessonName: string
+  ): Promise<Lesson[] | undefined> {
+    const db = await this.open();
+
+    return await db.get(
+      "SELECT * FROM lessonTbl WHERE courseName = $courseName AND name = $lessonName",
+      {
+        $courseName: courseName,
+        $lessonName: lessonName,
+      }
+    );
+  }
+
+  /**
    * Creates a new lesson in the database and returns the lesson's data.
    */
   public static async addLesson(lesson: LessonData): Promise<LessonData> {
