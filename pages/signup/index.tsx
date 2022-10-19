@@ -24,26 +24,6 @@ const Signup: NextPage = () => {
             Enter your credentials to create an account.
           </MyForm.Subtitle>
 
-          {/* <Link href="/api/auth/signin">
-            <MyForm.SSO
-              text="Sign up with GitHub"
-              icon={
-                <Image
-                  src="/github.png"
-                  width={20}
-                  height={20}
-                  alt="GitHub Logo"
-                  className="self-center"
-                />
-              }
-              largeSpacing
-              onClick={(e) => {
-                e.preventDefault();
-                // signIn("github", { callbackUrl: "/" });
-              }}
-            />
-          </Link> */}
-
           <Formik
             initialValues={{
               username: "",

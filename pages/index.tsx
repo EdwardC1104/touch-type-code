@@ -1,13 +1,9 @@
+import useGoTo from "hooks/useGoTo";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const router = useRouter();
-
-  const signup = () => {
-    router.push("/signup");
-  };
+  const goToSignUp = useGoTo("/signup");
 
   return (
     <>
@@ -27,7 +23,7 @@ const Home: NextPage = () => {
         </p>
 
         <button
-          onClick={signup}
+          onClick={goToSignUp}
           className="lg:mt-8 mt-4 font-medium text-white block bg-green-600 hover:bg-green-700 focus:bg-green-700 lg:py-2 lg:px-7 py-1.5 px-4 rounded-xl text-center max-w-fit lg:text-xl md:text-base text-sm "
         >
           Sign up for free

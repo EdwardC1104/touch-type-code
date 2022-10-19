@@ -88,10 +88,6 @@ const Dashboard: NextPage<Props> = ({ user }) => {
         <div className="mt-11 flex justify-center">
           <KeyboardHeatMap />
         </div>
-        {/* <div className="relative overflow-hidden rounded-md w-min m-0.5">
-          <div className="w-4 h-4 absolute top-2 left-2 bg-red-500 blur-[11px]"></div>
-          <div className="w-10 h-10 glass-background flex flex-col py-1 px-3"></div>
-        </div> */}
       </div>
     </>
   );

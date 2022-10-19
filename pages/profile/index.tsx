@@ -1,3 +1,4 @@
+import useGoTo from "hooks/useGoTo";
 import { getServerSession } from "lib/getServerSession";
 import type { GetServerSideProps, NextApiRequest, NextPage } from "next";
 import Head from "next/head";
@@ -8,11 +9,11 @@ interface Props {
 }
 
 const Profile: NextPage<Props> = ({ user }) => {
-  const router = useRouter();
+  const goToHome = useGoTo("/");
 
   const deleteAccount = async () => {
     const res = await fetch("/api/user/delete", { method: "DELETE" });
-    if (res.status === 200) router.push("/");
+    if (res.status === 200) goToHome();
   };
 
   return (
