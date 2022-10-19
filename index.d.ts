@@ -27,7 +27,7 @@ interface LessonData {
   name: string;
   description: string;
   background: string;
-  courseName: number;
+  courseName: string;
   content: string;
 }
 interface Lesson extends LessonData {
