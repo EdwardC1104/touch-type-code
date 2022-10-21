@@ -3,7 +3,7 @@ interface Props {
 }
 
 const Subtitle = ({ children }: Props) => (
-  <p className="text-neutral-400 text-sm font-medium mb-8">{children}</p>
+  <p className="text-neutral-400 text-sm font-medium mb-6">{children}</p>
 );
 
 export default Subtitle;

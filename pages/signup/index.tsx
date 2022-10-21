@@ -1,16 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import MyForm from "components/Form";
-import Image from "next/image";
-import Link from "next/link";
-import { Field, Form, Formik } from "formik";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import useSignUpForm from "hooks/useSignUpForm";
 
 const Signup: NextPage = () => {
-  const router = useRouter();
-
-  const [errorMessage, setErrorMessage] = useState(`\u00a0`);
+  const { formController, globalErrorMessage } = useSignUpForm();
 
   return (
     <>
@@ -23,87 +17,70 @@ const Signup: NextPage = () => {
           <MyForm.Subtitle>
             Enter your credentials to create an account.
           </MyForm.Subtitle>
-
-          <Formik
-            initialValues={{
-              username: "",
-              password: "",
-              email: "",
-              name: "",
-            }}
-            onSubmit={async (values, { setSubmitting }) => {
-              const res = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(values),
-              });
-
-              const json = await res.json();
-              const { ok } = res;
-
-              setSubmitting(false);
-              if (ok) {
-                router.push("/courses");
-              } else {
-                setErrorMessage(json.error);
+          <MyForm.Form onSubmit={formController.handleSubmit}>
+            <MyForm.Input
+              label="Name"
+              name="name"
+              type="name"
+              id="name"
+              placeholder="Enter your name"
+              onChange={formController.handleChange}
+              value={formController.values.name}
+              error={formController.errors.name}
+              touched={formController.touched.name}
+              setTouched={() =>
+                formController.setFieldTouched("name", true, true)
               }
-            }}
-          >
-            <Form>
-              <MyForm.Label htmlFor="name">Name</MyForm.Label>
-              <Field
-                required
-                type="name"
-                name="name"
-                id="name"
-                placeholder="Enter your full name"
-                className={`rounded-xl border border-neutral-600 py-2 flex justify-center align-center px-3 bg-neutral-900 w-full text-neutral-400 placeholder:text-neutral-600 text-sm font-medium h-11 focus:outline-none focus:border-green-500 focus:border-1 focus:ring-green-500 focus:ring-1 transition-all ${
-                  false ? "mb-10" : "mb-5"
-                }`}
-              />
-              <MyForm.Label htmlFor="email">Email</MyForm.Label>
-              <Field
-                required
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email"
-                className={`rounded-xl border border-neutral-600 py-2 flex justify-center align-center px-3 bg-neutral-900 w-full text-neutral-400 placeholder:text-neutral-600 text-sm font-medium h-11 focus:outline-none focus:border-green-500 focus:border-1 focus:ring-green-500 focus:ring-1 transition-all ${
-                  false ? "mb-10" : "mb-5"
-                }`}
-              />
-              <MyForm.Label htmlFor="username">Username</MyForm.Label>
-              <Field
-                required
-                type="username"
-                name="username"
-                id="username"
-                placeholder="Enter a username"
-                className={`rounded-xl border border-neutral-600 py-2 flex justify-center align-center px-3 bg-neutral-900 w-full text-neutral-400 placeholder:text-neutral-600 text-sm font-medium h-11 focus:outline-none focus:border-green-500 focus:border-1 focus:ring-green-500 focus:ring-1 transition-all ${
-                  false ? "mb-10" : "mb-5"
-                }`}
-              />
-              <MyForm.Label htmlFor="password">Password</MyForm.Label>
-              <Field
-                id="password"
-                name="password"
-                placeholder="Enter a password"
-                type="password"
-                required
-                className={`rounded-xl border border-neutral-600 py-2 flex justify-center align-center px-3 bg-neutral-900 w-full text-neutral-400 placeholder:text-neutral-600 text-sm font-medium h-11 focus:outline-none focus:border-green-500 focus:border-1 focus:ring-green-500 focus:ring-1 transition-all ${
-                  true ? "mb-10" : "mb-5"
-                }`}
-              />
-              <input
-                type="submit"
-                className="font-bold bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-xl text-center w-full h-11"
-                value={"Sign up"}
-              />
-              <MyForm.ErrorMessage>{errorMessage}</MyForm.ErrorMessage>
-            </Form>
-          </Formik>
+              required
+            />
+            <MyForm.Input
+              label="Email"
+              name="email"
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              onChange={formController.handleChange}
+              value={formController.values.email}
+              error={formController.errors.email}
+              touched={formController.touched.email}
+              setTouched={() =>
+                formController.setFieldTouched("email", true, true)
+              }
+              required
+            />
+            <MyForm.Input
+              label="Username"
+              name="username"
+              type="username"
+              id="username"
+              placeholder="Enter a username"
+              onChange={formController.handleChange}
+              value={formController.values.username}
+              error={formController.errors.username}
+              touched={formController.touched.username}
+              setTouched={() =>
+                formController.setFieldTouched("username", true, true)
+              }
+              required
+            />
+            <MyForm.Input
+              label="Password"
+              name="password"
+              type="password"
+              id="password"
+              placeholder="Enter a password"
+              onChange={formController.handleChange}
+              value={formController.values.password}
+              error={formController.errors.password}
+              touched={formController.touched.password}
+              setTouched={() =>
+                formController.setFieldTouched("password", true, true)
+              }
+              required
+            />
+            <MyForm.Submit value="Sign up" />
+            <MyForm.ErrorMessage>{globalErrorMessage}</MyForm.ErrorMessage>
+          </MyForm.Form>
         </MyForm.Card>
       </div>
     </>
