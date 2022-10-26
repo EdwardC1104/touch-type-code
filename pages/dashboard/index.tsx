@@ -1,33 +1,55 @@
 import DataCard from "components/DataCard";
-import KeyboardHeatMap from "components/KeyboardHeatMap";
+import Keyboard from "components/Keyboard";
 import { getServerSession } from "lib/getServerSession";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
-interface Props {
-  user: User;
-}
-
-const data = [
-  {
-    month: "Oct",
-    value: 8,
-  },
-  {
-    month: "Nov",
-    value: 16,
-  },
-  {
-    month: "Dec",
-    value: 12,
-  },
-  {
-    month: "Jan",
-    value: 26,
-  },
+const data: [] = [
+  // {
+  //   month: "Oct",
+  //   value: 8,
+  // },
+  // {
+  //   month: "Nov",
+  //   value: 16,
+  // },
+  // {
+  //   month: "Dec",
+  //   value: 12,
+  // },
+  // {
+  //   month: "Jan",
+  //   value: 26,
+  // },
 ];
 
-const Dashboard: NextPage<Props> = ({ user }) => {
+const Dashboard: NextPage = () => {
+  const [streak, setStreak] = useState(0);
+  const [daysActive, setDaysActive] = useState(0);
+  const [speed, setSpeed] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [numberCompleted, setNumberCompleted] = useState(0);
+  const [accuracy, setAccuracy] = useState(0);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const res = await fetch("/api/dashboard", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await res.json();
+
+      setAverageRating(data.averageRating);
+      setNumberCompleted(data.numberCompleted);
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <>
       <Head>
@@ -39,21 +61,21 @@ const Dashboard: NextPage<Props> = ({ user }) => {
             title="Streak"
             iconPath="/clock-icon.svg"
             iconAlt="clock icon"
-            value={23}
+            value={streak}
             unit="days"
           />
           <DataCard
             title="Days Active"
             iconPath="/calendar-icon.svg"
             iconAlt="calendar icon"
-            value={53}
+            value={daysActive}
             unit="days"
           />
           <DataCard
             title="Speed"
             iconPath="/progress-icon.svg"
             iconAlt="icon showing progress"
-            value={27}
+            value={speed}
             unit="wpm"
             large
             graphColor="#FA5B8E"
@@ -63,7 +85,7 @@ const Dashboard: NextPage<Props> = ({ user }) => {
             title="Average Rating"
             iconPath="/star-icon.svg"
             iconAlt="star icon"
-            value={4}
+            value={averageRating}
             unit=""
             rating
           />
@@ -71,14 +93,14 @@ const Dashboard: NextPage<Props> = ({ user }) => {
             title="Completed"
             iconPath="/document-icon.svg"
             iconAlt="document icon"
-            value={42}
+            value={numberCompleted}
             unit="lessons"
           />
           <DataCard
             title="Accuracy"
             iconPath="/tick-icon.svg"
             iconAlt="tick icon"
-            value={89}
+            value={accuracy}
             unit="%"
             large
             graphColor="#7CE25C"
@@ -86,7 +108,7 @@ const Dashboard: NextPage<Props> = ({ user }) => {
           />
         </div>
         <div className="mt-11 flex justify-center">
-          <KeyboardHeatMap />
+          <Keyboard greenKeys={[]} orangeKeys={[]} redKeys={[]} />
         </div>
       </div>
     </>
@@ -97,9 +119,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = await getServerSession(req);
   if (user)
     return {
-      props: {
-        user,
-      },
+      props: {},
     };
   else
     return {

@@ -80,15 +80,15 @@ class Database {
 
     await db.run(
       "CREATE TABLE IF NOT EXISTS userLessonTbl (\
+        id INTEGER PRIMARY KEY AUTOINCREMENT,\
         dateStarted TEXT NOT NULL,\
         userId INTEGER NOT NULL,\
         lessonId INTEGER NOT NULL,\
         rating INTEGER NOT NULL,\
-        wps INTEGER NOT NULL,\
+        wpm INTEGER NOT NULL,\
         accuracy REAL NOT NULL,\
         FOREIGN KEY (userId) REFERENCES userTbl(id),\
-        FOREIGN KEY (lessonId) REFERENCES lessonTbl(id),\
-        PRIMARY Key (userId, lessonId)\
+        FOREIGN KEY (lessonId) REFERENCES lessonTbl(id)\
       );"
     );
 
@@ -221,11 +221,20 @@ class Database {
     if (courseName && userId)
       return await db.all(
         "SELECT *\
-        FROM lessonTbl\
-        LEFT JOIN userLessonTbl\
-        ON lessonTbl.id = userLessonTbl.lessonId\
-        AND userLessonTbl.userId = $userId\
-        WHERE courseName = $courseName",
+        FROM  (\
+          SELECT *\
+          FROM  (\
+            SELECT *\
+            FROM lessonTbl\
+            LEFT JOIN userLessonTbl\
+            ON lessonTbl.id = userLessonTbl.lessonId\
+            AND userLessonTbl.userId = $userId\
+            WHERE courseName = $courseName\
+            ORDER BY userLessonTbl.rating DESC\
+          )\
+          GROUP BY lessonId\
+        )\
+        ORDER BY name ASC",
         {
           $userId: userId,
           $courseName: courseName,
@@ -236,10 +245,19 @@ class Database {
     if (userId)
       return await db.all(
         "SELECT *\
-        FROM lessonTbl\
-        LEFT JOIN userLessonTbl\
-        ON lessonTbl.id = userLessonTbl.lessonId\
-        AND userLessonTbl.userId = $userId",
+        FROM  (\
+          SELECT *\
+          FROM  (\
+            SELECT *\
+            FROM lessonTbl\
+            LEFT JOIN userLessonTbl\
+            ON lessonTbl.id = userLessonTbl.lessonId\
+            AND userLessonTbl.userId = $userId\
+            ORDER BY userLessonTbl.rating DESC\
+          )\
+          GROUP BY lessonId\
+        )\
+        ORDER BY name ASC",
         {
           $userId: userId,
         }
@@ -298,6 +316,33 @@ class Database {
     await this.close(db);
 
     return lesson;
+  }
+
+  public static async addLessonResult(
+    userId: number,
+    lessonId: number,
+    rating: number,
+    wpm: number,
+    accuracy: number,
+    dateStarted: string,
+    correctKeys: string[],
+    incorrectKeys: string[]
+  ) {
+    const db = await this.open();
+
+    await db.run(
+      "INSERT INTO userLessonTbl (userId, lessonId, rating, wpm, accuracy, dateStarted) VALUES ($userId, $lessonId, $rating, $wpm, $accuracy, $dateStarted)",
+      {
+        $userId: userId,
+        $lessonId: lessonId,
+        $rating: rating,
+        $wpm: wpm,
+        $accuracy: accuracy,
+        $dateStarted: dateStarted,
+      }
+    );
+
+    await this.close(db);
   }
 }
 

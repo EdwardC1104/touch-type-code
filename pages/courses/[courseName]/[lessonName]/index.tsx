@@ -1,4 +1,5 @@
 import LessonContent from "classes/LessonContent";
+import Keyboard from "components/Keyboard";
 import Database from "database/Database";
 import { getServerSession } from "lib/getServerSession";
 import round from "lib/round";
@@ -70,8 +71,6 @@ class LessonPage extends Component<Props, State> {
   calculateRating(): number {
     const computedWPM = this.calculateWPM() * this.calculateAccuracy();
 
-    console.log(computedWPM);
-
     if (computedWPM < 0) return 0;
     if (computedWPM < 10) return 1;
     if (computedWPM < 20) return 2;
@@ -80,16 +79,46 @@ class LessonPage extends Component<Props, State> {
     return 5;
   }
 
-  onLessonFinish(): void {
+  async onLessonFinish(): Promise<void> {
     const { router } = this.props;
+
+    const wpm = this.calculateWPM();
+    const accuracy = this.calculateAccuracy();
+    const rating = this.calculateRating();
+    const incorrectKeys =
+      this.contentLinkedList.getIncorrectLettersForKeyboard();
+    const correctKeys = this.contentLinkedList.getCorrectLettersForKeyboard();
+    const dateStarted = new Date().toDateString();
+
+    const res = await fetch("/api/lesson/addResult", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: this.props.user.id,
+        lessonId: this.props.lesson.id,
+        wpm,
+        accuracy,
+        rating,
+        dateStarted,
+        incorrectKeys,
+        correctKeys,
+      }),
+    });
+
     router.push(
       {
         pathname: "/results",
         query: {
-          rating: this.calculateRating(),
-          wpm: this.calculateWPM(),
-          accuracy: this.calculateAccuracy(),
-          heatmap: [],
+          courseName: this.props.lesson.courseName,
+          lessonName: this.props.lesson.name,
+          rating,
+          wpm,
+          accuracy,
+          dateStarted,
+          incorrectKeys,
+          correctKeys,
         },
       },
       "/results"
@@ -101,7 +130,7 @@ class LessonPage extends Component<Props, State> {
    * Determines whether the key is correct or not and updates the linked list of letters accordingly.
    * Updates state with the newly generated code snippet so that the webpage re-renders.
    */
-  onKeyPress(event: KeyboardEvent): void {
+  onKeyPress(event: KeyboardEvent): void | Promise<void> {
     // If the user has just started typing, start the timer.
     if (this.startTime === null) this.startTime = Date.now();
 
@@ -164,6 +193,12 @@ class LessonPage extends Component<Props, State> {
    */
   render(): JSX.Element {
     const title = this.getPageTitle();
+    const currentKey = this.contentLinkedList
+      .getCurrentLetter()
+      ?.getLetterOnKeyboard();
+    const shiftKey = this.contentLinkedList.getCurrentLetter()?.isShifted()
+      ? "shift"
+      : undefined;
 
     return (
       <>
@@ -171,12 +206,19 @@ class LessonPage extends Component<Props, State> {
           <title>{title}</title>
         </Head>
         <div>
-          <div className="flex justify-center mt-16">
+          <h2 className="font-bold text-2xl text-center mt-2">{title}</h2>
+          <div className="flex justify-center mt-10">
             <pre className="text-4xl font-bold font-mono leading-normal">
               {this.state.practiceCodeSnippet}
             </pre>
           </div>
-          <p>{this.calculateRating()}</p>
+          <div className="flex justify-center mt-10">
+            <Keyboard
+              greenKeys={[currentKey, shiftKey]}
+              orangeKeys={[]}
+              redKeys={[]}
+            />
+          </div>
         </div>
       </>
     );

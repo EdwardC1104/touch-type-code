@@ -1,6 +1,7 @@
 import DataCard from "components/DataCard";
-import KeyboardHeatMap from "components/KeyboardHeatMap";
+import Keyboard from "components/Keyboard";
 import Rating from "components/Rating";
+import round from "lib/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -8,19 +9,33 @@ import { useRouter } from "next/router";
 interface Props {
   rating: 0 | 1 | 2 | 3 | 4 | 5;
   wpm: number;
-  accuracy: number;
-  heatmap: [];
+  accuracy: string;
+  incorrectKeys: string[];
+  correctKeys: string[];
+  lessonName: string;
+  courseName: string;
 }
 
-const Profile: NextPage<Props> = ({ wpm, accuracy, rating }) => {
+const Profile: NextPage<Props> = ({
+  wpm,
+  accuracy,
+  rating,
+  incorrectKeys,
+  correctKeys,
+  lessonName,
+  courseName,
+}) => {
   const router = useRouter();
 
   const onTryAgain = () => {
-    router.back();
+    router.push(
+      "/courses/[courseName]/[lessonName]",
+      `/courses/${courseName}/${lessonName}`
+    );
   };
 
   const onContinue = () => {
-    router.push("/dashboard");
+    router.push("/courses/[courseName]", `/courses/${courseName}`);
   };
 
   return (
@@ -50,13 +65,17 @@ const Profile: NextPage<Props> = ({ wpm, accuracy, rating }) => {
               title="Accuracy"
               iconPath="/tick-icon.svg"
               iconAlt="tick icon"
-              value={accuracy * 100}
+              value={round(parseFloat(accuracy) * 100)}
               unit="%"
             />
           </div>
         </div>
         <div>
-          <KeyboardHeatMap />
+          <Keyboard
+            greenKeys={correctKeys}
+            orangeKeys={[]}
+            redKeys={incorrectKeys}
+          />
           <div className="flex justify-between mt-12">
             <button
               onClick={onTryAgain}
@@ -83,8 +102,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (
     query?.hasOwnProperty("rating") &&
     query?.hasOwnProperty("wpm") &&
-    query?.hasOwnProperty("accuracy") //&&
-    // query?.hasOwnProperty("heatmap")
+    query?.hasOwnProperty("accuracy") &&
+    query?.hasOwnProperty("incorrectKeys") &&
+    query?.hasOwnProperty("correctKeys") &&
+    query?.hasOwnProperty("lessonName") &&
+    query?.hasOwnProperty("courseName")
   )
     return {
       props: { ...query },
