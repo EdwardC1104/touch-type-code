@@ -1,6 +1,7 @@
 import LessonContent from "classes/LessonContent";
 import Database from "database/Database";
 import { getServerSession } from "lib/getServerSession";
+import round from "lib/round";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { NextRouter, withRouter } from "next/router";
@@ -49,11 +50,34 @@ class LessonPage extends Component<Props, State> {
   }
 
   /**
-   * Calculates the user's wpm and return null if the user hasn't typed anything yet.
+   * Calculates the user's wpm.
+   * https://www.speedtypingonline.com/typing-equations
    */
-  calculateWPM(): number | null {
-    if (this.startTime === null) return null;
-    return null;
+  calculateWPM(): number {
+    if (this.startTime === null) this.startTime = Date.now();
+    const minutesElapsed = (Date.now() - this.startTime) / 1000 / 60;
+    const lettersTypedSoFar = this.contentLinkedList.getNumberTypedSoFar();
+    const numberOfWords = lettersTypedSoFar / 5;
+    return round(numberOfWords / minutesElapsed);
+  }
+
+  calculateAccuracy(): number {
+    const numberOfLetters = this.contentLinkedList.getNumberTypedSoFar();
+    const numberOfCorrectLetters = this.contentLinkedList.getNumberCorrect();
+    return round(numberOfCorrectLetters / numberOfLetters, 2);
+  }
+
+  calculateRating(): number {
+    const computedWPM = this.calculateWPM() * this.calculateAccuracy();
+
+    console.log(computedWPM);
+
+    if (computedWPM < 0) return 0;
+    if (computedWPM < 10) return 1;
+    if (computedWPM < 20) return 2;
+    if (computedWPM < 25) return 3;
+    if (computedWPM < 30) return 4;
+    return 5;
   }
 
   onLessonFinish(): void {
@@ -62,9 +86,9 @@ class LessonPage extends Component<Props, State> {
       {
         pathname: "/results",
         query: {
-          rating: 4,
-          wpm: 27,
-          accuracy: 0.89,
+          rating: this.calculateRating(),
+          wpm: this.calculateWPM(),
+          accuracy: this.calculateAccuracy(),
           heatmap: [],
         },
       },
@@ -152,6 +176,7 @@ class LessonPage extends Component<Props, State> {
               {this.state.practiceCodeSnippet}
             </pre>
           </div>
+          <p>{this.calculateRating()}</p>
         </div>
       </>
     );

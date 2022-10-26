@@ -70,6 +70,49 @@ export default class LessonContent {
     return length;
   }
 
+  public getNumberCorrect(): number {
+    let numberCorrect = 0;
+
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      if (currentNode.getState() === "CORRECT") numberCorrect += 1;
+      currentNode = currentNode.next;
+    }
+
+    return numberCorrect;
+  }
+
+  public getNumberIncorrect(): number {
+    let numberIncorrect = 0;
+
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      if (currentNode.getState() === "INCORRECT") numberIncorrect += 1;
+      currentNode = currentNode.next;
+    }
+
+    return numberIncorrect;
+  }
+
+  /**
+   * Returns the number of letters that have been typed so far.
+   */
+  public getNumberTypedSoFar(): number {
+    let count = 0;
+
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      if (
+        currentNode.getState() === "CORRECT" ||
+        currentNode.getState() === "INCORRECT"
+      )
+        count += 1;
+      currentNode = currentNode.next;
+    }
+
+    return count;
+  }
+
   /**
    * Finds the letter that has the state "CURRENT" and returns it.
    */
