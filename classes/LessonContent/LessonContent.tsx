@@ -70,28 +70,46 @@ export default class LessonContent {
     return length;
   }
 
-  public getNumberCorrect(): number {
-    let numberCorrect = 0;
+  public getIncorrectLetters(): ContentNode[] {
+    const incorrectLetters: ContentNode[] = [];
 
     let currentNode = this.head;
     while (currentNode !== null) {
-      if (currentNode.getState() === "CORRECT") numberCorrect += 1;
+      if (currentNode.getState() === "INCORRECT")
+        incorrectLetters.push(currentNode);
       currentNode = currentNode.next;
     }
 
-    return numberCorrect;
+    return incorrectLetters;
+  }
+
+  public getIncorrectLettersForKeyboard(): string[] {
+    return this.getIncorrectLetters().map((node) => node.getLetterOnKeyboard());
   }
 
   public getNumberIncorrect(): number {
-    let numberIncorrect = 0;
+    return this.getIncorrectLetters().length;
+  }
+
+  public getCorrectLetters(): ContentNode[] {
+    const correctLetters: ContentNode[] = [];
 
     let currentNode = this.head;
     while (currentNode !== null) {
-      if (currentNode.getState() === "INCORRECT") numberIncorrect += 1;
+      if (currentNode.getState() === "CORRECT")
+        correctLetters.push(currentNode);
       currentNode = currentNode.next;
     }
 
-    return numberIncorrect;
+    return correctLetters;
+  }
+
+  public getCorrectLettersForKeyboard(): string[] {
+    return this.getCorrectLetters().map((node) => node.getLetterOnKeyboard());
+  }
+
+  public getNumberCorrect(): number {
+    return this.getCorrectLetters().length;
   }
 
   /**

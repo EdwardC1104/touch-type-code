@@ -1,3 +1,4 @@
+import doesKeyNeedShift from "lib/doesKeyNeedShift";
 import { LetterState } from "./LetterState";
 
 /**
@@ -88,6 +89,26 @@ export default class ContentNode {
         break;
     }
     return letterToDisplay;
+  }
+
+  public getLetterOnKeyboard(): string {
+    let letterOnKeyboard = this.data.letter.toUpperCase();
+    switch (this.data.letter) {
+      case "\t":
+        letterOnKeyboard = "tab";
+        break;
+      case "\n":
+        letterOnKeyboard = "enter";
+        break;
+      case " ":
+        letterOnKeyboard = "space";
+        break;
+    }
+    return letterOnKeyboard;
+  }
+
+  public isShifted(): boolean {
+    return doesKeyNeedShift(this.data.letter);
   }
 
   /**
