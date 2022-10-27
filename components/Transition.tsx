@@ -26,7 +26,7 @@ const Transition = ({ children }: Props) => {
   };
 
   return (
-    <AnimatePresence initial={false} exitBeforeEnter>
+    <AnimatePresence initial={false} mode="wait">
       <motion.div
         key={asPath}
         className="top-level-div"
