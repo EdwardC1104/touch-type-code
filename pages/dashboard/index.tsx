@@ -1,9 +1,10 @@
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
+import getDashboardData from "lib/getDashboardData";
 import { getServerSession } from "lib/getServerSession";
+import round from "lib/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
 
 const data: [] = [
   // {
@@ -23,33 +24,28 @@ const data: [] = [
   //   value: 26,
   // },
 ];
+interface Props {
+  streak: number;
+  daysActive: number;
+  speed: number;
+  averageRating: number;
+  numberCompleted: number;
+  accuracy: number;
+  speedGraphData: { month: string; value: number }[];
+  accuracyGraphData: { month: string; value: number }[];
+}
 
-const Dashboard: NextPage = () => {
-  const [streak, setStreak] = useState(0);
-  const [daysActive, setDaysActive] = useState(0);
-  const [speed, setSpeed] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
-  const [numberCompleted, setNumberCompleted] = useState(0);
-  const [accuracy, setAccuracy] = useState(0);
-
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      const res = await fetch("/api/dashboard", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-
-      setAverageRating(data.averageRating);
-      setNumberCompleted(data.numberCompleted);
-    };
-
-    fetchDashboardData();
-  }, []);
-
+const Dashboard: NextPage<Props> = ({
+  streak,
+  daysActive,
+  speed,
+  averageRating,
+  numberCompleted,
+  accuracy,
+  speedGraphData,
+  accuracyGraphData,
+}) => {
+  console.log(speedGraphData, accuracyGraphData);
   return (
     <>
       <Head>
@@ -79,7 +75,7 @@ const Dashboard: NextPage = () => {
             unit="wpm"
             large
             graphColor="#FA5B8E"
-            graphData={data}
+            graphData={speedGraphData}
           />
           <DataCard
             title="Average Rating"
@@ -100,11 +96,11 @@ const Dashboard: NextPage = () => {
             title="Accuracy"
             iconPath="/tick-icon.svg"
             iconAlt="tick icon"
-            value={accuracy}
+            value={round(accuracy * 100)}
             unit="%"
             large
             graphColor="#7CE25C"
-            graphData={data}
+            graphData={accuracyGraphData}
           />
         </div>
         <div className="mt-11 flex justify-center">
@@ -117,17 +113,19 @@ const Dashboard: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = await getServerSession(req);
-  if (user)
-    return {
-      props: {},
-    };
-  else
+  if (!user)
     return {
       redirect: {
         destination: "/login",
         permanent: false,
       },
     };
+
+  const data = await getDashboardData(user.id);
+
+  return {
+    props: { ...data },
+  };
 };
 
 export default Dashboard;

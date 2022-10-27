@@ -276,6 +276,26 @@ class Database {
     return await db.all("SELECT * FROM lessonTbl");
   }
 
+  public static async getResults(userId: number): Promise<Lesson[]> {
+    const db = await this.open();
+
+    const results = await db.all(
+      "SELECT * FROM userLessonTbl WHERE userId = $userId",
+      {
+        $userId: userId,
+      }
+    );
+
+    await this.close(db);
+
+    results.sort(
+      (a, b) =>
+        new Date(a.dateStarted).getTime() - new Date(b.dateStarted).getTime()
+    );
+
+    return results;
+  }
+
   /**
    * Gets the specified lesson from the database by using the unique combination of course name and lesson name.
    */

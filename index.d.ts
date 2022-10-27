@@ -36,6 +36,6 @@ interface Lesson extends LessonData {
   // Data stored in the user_lesson table
   rating?: 0 | 1 | 2 | 3 | 4 | 5;
   dateStarted?: string;
-  wps?: number;
+  wpm?: number;
   accuracy?: number;
 }

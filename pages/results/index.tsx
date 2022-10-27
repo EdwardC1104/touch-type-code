@@ -97,8 +97,6 @@ const Profile: NextPage<Props> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  console.log(query);
-
   if (
     query?.hasOwnProperty("rating") &&
     query?.hasOwnProperty("wpm") &&

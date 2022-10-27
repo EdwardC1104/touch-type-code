@@ -13,11 +13,12 @@ const Graph = ({ data, color, id }: Props) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart
+        id={Math.random().toString()}
         data={data}
         margin={{
           top: 0,
           right: 0,
-          left: -29,
+          left: -20,
           bottom: 0,
         }}
       >
