@@ -1,5 +1,8 @@
 import Database from "database/Database";
 import { getServerSession } from "lib/getServerSession";
+import emailValidator from "lib/validators/emailValidator";
+import nameValidator from "lib/validators/nameValidator";
+import usernameValidator from "lib/validators/usernameValidator";
 import type { NextApiRequest, NextApiResponse } from "next";
 import logout from "../auth/logout";
 
@@ -21,10 +24,14 @@ export default async function handler(
 
   const { name, username, email } = req.body;
 
-  if (!name || !username || !email)
-    return res.status(400).json({
-      error: "Missing required fields",
-    });
+  const nameError = nameValidator(name);
+  if (nameError) return res.status(400).json({ error: nameError });
+
+  const emailError = emailValidator(email);
+  if (emailError) return res.status(400).json({ error: emailError });
+
+  const usernameError = usernameValidator(username);
+  if (usernameError) return res.status(400).json({ error: usernameError });
 
   const user = await getServerSession(req);
   if (!user) return res.status(401).json({ error: "Unauthorized" });

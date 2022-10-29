@@ -1,6 +1,7 @@
 import Database from "database/Database";
 import { getServerSession } from "lib/getServerSession";
 import { generatePassword, passwordIsValid } from "lib/passwords";
+import passwordValidator from "lib/validators/passwordValidator";
 import type { NextApiRequest, NextApiResponse } from "next";
 import logout from "../auth/logout";
 
@@ -22,10 +23,11 @@ export default async function handler(
 
   const { password, newPassword } = req.body;
 
-  if (!password || !newPassword)
-    return res.status(400).json({
-      error: "Missing required fields",
-    });
+  if (!password) return res.status(400).json({ error: "Password is required" });
+
+  const newPasswordError = passwordValidator(password);
+  if (newPasswordError)
+    return res.status(400).json({ error: newPasswordError });
 
   const userSession = await getServerSession(req);
   if (!userSession) return res.status(401).json({ error: "Unauthorized" });

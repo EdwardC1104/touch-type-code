@@ -1,5 +1,9 @@
 import Database from "database/Database";
 import { generatePassword } from "lib/passwords";
+import emailValidator from "lib/validators/emailValidator";
+import nameValidator from "lib/validators/nameValidator";
+import passwordValidator from "lib/validators/passwordValidator";
+import usernameValidator from "lib/validators/usernameValidator";
 import type { NextApiRequest, NextApiResponse } from "next";
 import login from "./login";
 
@@ -21,10 +25,17 @@ export default async function handler(
 
   const { name, username, password, email } = req.body;
 
-  if (!name || !username || !password || !email)
-    return res.status(400).json({
-      error: "Missing required fields",
-    });
+  const nameError = nameValidator(name);
+  if (nameError) return res.status(400).json({ error: nameError });
+
+  const emailError = emailValidator(email);
+  if (emailError) return res.status(400).json({ error: emailError });
+
+  const usernameError = usernameValidator(username);
+  if (usernameError) return res.status(400).json({ error: usernameError });
+
+  const passwordError = passwordValidator(password);
+  if (passwordError) return res.status(400).json({ error: passwordError });
 
   const { salt, hash } = generatePassword(req.body.password);
 
