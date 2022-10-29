@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import MyForm from "components/Form";
-import useSignUpForm from "hooks/useSignUpForm";
+import useSignUpForm from "hooks/formControllers/useSignUpForm";
 
 const Signup: NextPage = () => {
   const { formController, globalErrorMessage } = useSignUpForm();

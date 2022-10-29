@@ -1,7 +1,7 @@
 import Database from "database/Database";
-import { generatePassword } from "lib/passwords";
+import { getServerSession } from "lib/getServerSession";
 import type { NextApiRequest, NextApiResponse } from "next";
-import login from "./login";
+import logout from "../auth/logout";
 
 type Data = {
   error: string;
@@ -19,25 +19,25 @@ export default async function handler(
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });
 
-  const { name, username, password, email } = req.body;
+  const { name, username, email } = req.body;
 
-  if (!name || !username || !password || !email)
+  if (!name || !username || !email)
     return res.status(400).json({
       error: "Missing required fields",
     });
 
-  const { salt, hash } = generatePassword(req.body.password);
+  const user = await getServerSession(req);
+  if (!user) return res.status(401).json({ error: "Unauthorized" });
 
   try {
-    await Database.addUser({
+    await Database.editUser({
+      id: user.id,
       name,
       username,
-      passwordSalt: salt,
-      passwordHash: hash,
       email,
     });
 
-    return login(req, res); // Log the user in after signing up
+    return logout(req, res); // Force the user to log in again so they can use their new credentials and the session is updated
   } catch (e: any) {
     const errorString = e.toString();
     if (

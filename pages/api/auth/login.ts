@@ -16,7 +16,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password } = req.body;
 
   if (!username || !password)
-    return res.status(401).json({ error: "Missing username or password" });
+    return res.status(401).json({ error: "Missing requierd fields" });
 
   const user = await Database.getUserByUsername(username);
 
@@ -25,7 +25,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     setCookie(res, "jwt", jwt);
     res.status(200).json({ message: "success" });
   } else {
-    return res.status(401).json({ error: "Invalid username or password" });
+    return res.status(401).json({ error: "Incorrect username or password" });
   }
 };
 

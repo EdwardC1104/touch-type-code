@@ -1,16 +1,14 @@
 import emailValidator from "./validators/emailValidator";
 import nameValidator from "./validators/nameValidator";
-import passwordValidator from "./validators/passwordValidator";
 import usernameValidator from "./validators/usernameValidator";
 
 interface Values {
   username: string;
-  password: string;
   email: string;
   name: string;
 }
 
-const validateSignUpInput = (values: Values) => {
+const validateProfileInputs = (values: Values) => {
   const errors: Record<string, string> = {};
 
   const nameError = nameValidator(values.name);
@@ -22,10 +20,7 @@ const validateSignUpInput = (values: Values) => {
   const usernameError = usernameValidator(values.username);
   if (usernameError) errors.username = usernameError;
 
-  const passwordError = passwordValidator(values.password);
-  if (passwordError) errors.password = passwordError;
-
   return errors;
 };
 
-export default validateSignUpInput;
+export default validateProfileInputs;

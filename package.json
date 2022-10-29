@@ -16,16 +16,13 @@
     "framer-motion": "^7.5.3",
     "jsonwebtoken": "^8.5.1",
     "next": "12.2.3",
-    "next-connect": "^0.13.0",
-    "promised-sqlite3": "^1.2.0",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "recharts": "2.1.12",
     "sass": "^1.55.0",
     "sqlite": "^4.1.2",
-    "sqlite3": "^5.1.2",
-    "yup": "^0.32.11"
+    "sqlite3": "^5.1.2"
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",

@@ -45,7 +45,6 @@ const Dashboard: NextPage<Props> = ({
   speedGraphData,
   accuracyGraphData,
 }) => {
-  console.log(speedGraphData, accuracyGraphData);
   return (
     <>
       <Head>

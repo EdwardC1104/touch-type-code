@@ -134,6 +134,43 @@ class Database {
     return user;
   }
 
+  public static async editUser(user: Partial<User>): Promise<Partial<User>> {
+    const db = await this.open();
+
+    await db.run(
+      "UPDATE userTbl SET name=$name, username=$username, email=$email WHERE id=$id",
+      {
+        $id: user.id,
+        $name: user.name,
+        $username: user.username,
+        $email: user.email,
+      }
+    );
+
+    await this.close(db);
+
+    return user;
+  }
+
+  public static async editUserPassword(
+    user: Partial<User>
+  ): Promise<Partial<User>> {
+    const db = await this.open();
+
+    await db.run(
+      "UPDATE userTbl SET passwordHash=$passwordHash, passwordSalt=$passwordSalt WHERE id=$id",
+      {
+        $passwordHash: user.passwordHash,
+        $passwordSalt: user.passwordSalt,
+        $id: user.id,
+      }
+    );
+
+    await this.close(db);
+
+    return user;
+  }
+
   /**
    * Deletes a user from the database by their id.
    */

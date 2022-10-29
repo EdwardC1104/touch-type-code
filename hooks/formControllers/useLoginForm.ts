@@ -1,13 +1,12 @@
 import { useFormik } from "formik";
-import validateSignUpInput from "lib/validateSignUpInputs";
 import { useState } from "react";
-import useGoTo from "./useGoTo";
+import useGoTo from "../useGoTo";
 
 /**
- * React hook that handles the logic for the sign up form submission
+ * React hook that handles the logic for the login form submission
  * and also wraps the formik library to handle the form state.
  */
-const useSignUpForm = () => {
+const useLoginForm = () => {
   const goToCourses = useGoTo("/courses");
 
   // Stores errors returned from the server
@@ -20,15 +19,11 @@ const useSignUpForm = () => {
     initialValues: {
       username: "",
       password: "",
-      email: "",
-      name: "",
     },
-    // Pass in the validation function
-    validate: validateSignUpInput,
     // Handle form submission
     onSubmit: async (values, { setSubmitting }) => {
-      // Send a POST request to the API to create a new user with the values from the form
-      const res = await fetch("/api/auth/signup", {
+      // Send a POST request to the API to login a user with the values from the form
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,4 +47,4 @@ const useSignUpForm = () => {
   return { formController, globalErrorMessage };
 };
 
-export default useSignUpForm;
+export default useLoginForm;
