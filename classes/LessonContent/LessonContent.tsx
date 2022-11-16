@@ -1,37 +1,16 @@
-import ContentNode from "./ContentNode";
+import { LinkedList } from "classes/LinkedList";
+import ContentNode, { ContentNodeData } from "./ContentNode";
 import { LetterState } from "./LetterState";
 
-export default class LessonContent {
-  /**
-   * The first node in the linked list.
-   */
-  public head: ContentNode | null;
-
+export default class LessonContent extends LinkedList<
+  ContentNodeData,
+  ContentNode
+> {
   constructor(text: string) {
-    this.head = null;
+    super();
 
     // I tidied the initialisation of the linked list into a separate method.
     this.setContent(text);
-  }
-
-  /**
-   * Adds a new node to the end of the linked list.
-   */
-  public addNode(letter: string, state: LetterState) {
-    const newNode = new ContentNode(letter, state);
-
-    // If the linked list is empty, make the new node the head.
-    if (this.head === null) {
-      this.head = newNode;
-      return;
-    }
-
-    // Otherwise, find the last node in the linked list and add the new node after that.
-    let currentNode = this.head;
-    while (currentNode.next !== null) {
-      currentNode = currentNode.next;
-    }
-    currentNode.next = newNode;
   }
 
   /**
@@ -51,7 +30,8 @@ export default class LessonContent {
       if (index === 0) state = "CURRENT";
       if (letter === "\t") state = "IGNORE";
 
-      this.addNode(letter, state);
+      const newNode = new ContentNode(letter, state);
+      this.addNode(newNode);
     });
   }
 

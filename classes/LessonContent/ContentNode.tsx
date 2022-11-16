@@ -1,30 +1,23 @@
+import { ListNode } from "classes/LinkedList";
 import doesKeyNeedShift from "lib/doesKeyNeedShift";
-import { LetterState } from "./LetterState";
+import type { LetterState } from "./LetterState";
 
 /**
  * A node in the content linked list.
  * The data is a single letter and its state.
  */
-export default class ContentNode {
-  /**
-   *  Pointer to the next node in the linked list.
-   */
-  public next: ContentNode | null;
 
-  /**
-   * The data should only be read and modified by methods.
-   */
-  private data: {
-    letter: string;
-    state: LetterState;
-  };
+export type ContentNodeData = {
+  letter: string;
+  state: LetterState;
+};
 
+export default class ContentNode extends ListNode<
+  ContentNodeData,
+  ContentNode
+> {
   constructor(letter: string, state: LetterState) {
-    this.next = null;
-    this.data = {
-      letter,
-      state,
-    };
+    super({ letter, state });
   }
 
   /**
