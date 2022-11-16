@@ -25,7 +25,7 @@ export default async function handler(
 
   if (!password) return res.status(400).json({ error: "Password is required" });
 
-  const newPasswordError = passwordValidator(password);
+  const newPasswordError = passwordValidator(newPassword);
   if (newPasswordError)
     return res.status(400).json({ error: newPasswordError });
 

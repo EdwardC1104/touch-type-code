@@ -10,8 +10,8 @@ interface Props {
   rating: 0 | 1 | 2 | 3 | 4 | 5;
   wpm: number;
   accuracy: string;
-  incorrectKeys: string[];
-  correctKeys: string[];
+  incorrectKeys?: string[];
+  correctKeys?: string[];
   lessonName: string;
   courseName: string;
 }
@@ -72,9 +72,9 @@ const Profile: NextPage<Props> = ({
         </div>
         <div>
           <Keyboard
-            greenKeys={correctKeys}
+            greenKeys={correctKeys ?? []}
             orangeKeys={[]}
-            redKeys={incorrectKeys}
+            redKeys={incorrectKeys ?? []}
           />
           <div className="flex justify-between mt-12">
             <button
@@ -101,8 +101,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     query?.hasOwnProperty("rating") &&
     query?.hasOwnProperty("wpm") &&
     query?.hasOwnProperty("accuracy") &&
-    query?.hasOwnProperty("incorrectKeys") &&
-    query?.hasOwnProperty("correctKeys") &&
     query?.hasOwnProperty("lessonName") &&
     query?.hasOwnProperty("courseName")
   )

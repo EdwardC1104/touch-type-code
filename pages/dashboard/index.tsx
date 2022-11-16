@@ -6,24 +6,6 @@ import round from "lib/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 
-const data: [] = [
-  // {
-  //   month: "Oct",
-  //   value: 8,
-  // },
-  // {
-  //   month: "Nov",
-  //   value: 16,
-  // },
-  // {
-  //   month: "Dec",
-  //   value: 12,
-  // },
-  // {
-  //   month: "Jan",
-  //   value: 26,
-  // },
-];
 interface Props {
   streak: number;
   daysActive: number;

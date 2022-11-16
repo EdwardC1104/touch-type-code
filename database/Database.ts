@@ -269,7 +269,7 @@ class Database {
             WHERE courseName = $courseName\
             ORDER BY userLessonTbl.rating DESC\
           )\
-          GROUP BY lessonId\
+          GROUP BY id\
         )\
         ORDER BY name ASC",
         {

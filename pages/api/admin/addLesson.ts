@@ -60,7 +60,6 @@ export default async function handler(
       message: "success",
     });
   } catch (e) {
-    console.error(e);
     return res.status(500).json({
       error: "Error adding lesson",
     });
