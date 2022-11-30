@@ -18,11 +18,16 @@ interface State {
   practiceCodeSnippet: JSX.Element[];
 }
 
-class LessonPage extends Component<Props, State> {
+export class LessonPage extends Component<Props, State> {
   /**
    * Used to keep track of the user's wpm.
    */
   startTime: number | null = null;
+
+  /**
+   * Used to track how long it takes the user to type each key.
+   */
+  timeSinceLastKey: number | null = null;
 
   /**
    * The linked list of letters that make up the lesson content.
@@ -151,6 +156,13 @@ class LessonPage extends Component<Props, State> {
       return;
     }
 
+    // Record the time they took to type the key.
+    if (this.timeSinceLastKey === null) this.timeSinceLastKey = Date.now();
+    const msToType = Date.now() - this.timeSinceLastKey;
+    this.timeSinceLastKey = Date.now();
+    currentLetter.setMsToType(msToType);
+    console.log(msToType);
+
     // Update the current letter's state.
     if (inputKey === currentLetter.getRawLetter())
       currentLetter.setState("CORRECT");
@@ -161,9 +173,7 @@ class LessonPage extends Component<Props, State> {
     while (nextLetter?.getState() === "IGNORE") nextLetter = nextLetter?.next;
 
     // If the next letter is null, the user has finished the lesson.
-    if (nextLetter === null) {
-      return this.onLessonFinish();
-    }
+    if (nextLetter === null) return this.onLessonFinish();
 
     // Update the next letter's state to be the current letter.
     nextLetter.setState("CURRENT");

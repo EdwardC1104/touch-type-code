@@ -10,6 +10,7 @@ import type { LetterState } from "./LetterState";
 export type ContentNodeData = {
   letter: string;
   state: LetterState;
+  msToType: number;
 };
 
 export default class ContentNode extends ListNode<
@@ -17,7 +18,7 @@ export default class ContentNode extends ListNode<
   ContentNode
 > {
   constructor(letter: string, state: LetterState) {
-    super({ letter, state });
+    super({ letter, state, msToType: 0 });
   }
 
   /**
@@ -32,6 +33,13 @@ export default class ContentNode extends ListNode<
    */
   public setState(value: LetterState): void {
     this.data.state = value;
+  }
+
+  /**
+   * Sets the time it took to type the letter.
+   */
+  public setMsToType(msToType: number): void {
+    this.data.msToType = msToType;
   }
 
   /**

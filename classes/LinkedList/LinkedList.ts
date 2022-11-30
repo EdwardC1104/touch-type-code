@@ -7,7 +7,7 @@ export default class LinkedList<
   /**
    * The first node in the linked list.
    */
-  public head: NodeType | null;
+  protected head: NodeType | null;
 
   constructor() {
     this.head = null;
