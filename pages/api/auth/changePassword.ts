@@ -1,4 +1,4 @@
-import Database from "database/Database";
+import Database from "classes/Database";
 import { getServerSession } from "lib/getServerSession";
 import { generatePassword, passwordIsValid } from "lib/passwords";
 import passwordValidator from "lib/validators/passwordValidator";

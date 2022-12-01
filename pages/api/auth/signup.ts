@@ -1,4 +1,4 @@
-import Database from "database/Database";
+import Database from "classes/Database";
 import { generatePassword } from "lib/passwords";
 import emailValidator from "lib/validators/emailValidator";
 import nameValidator from "lib/validators/nameValidator";

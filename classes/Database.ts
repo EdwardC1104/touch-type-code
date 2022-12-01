@@ -94,19 +94,26 @@ class Database {
 
     await db.run(
       "CREATE TABLE IF NOT EXISTS characterTbl (\
-          symbol TEXT PRIMARY KEY\
+          symbol TEXT PRIMARY KEY,\
+          keyboardRow INTEGER,\
+          keyboardColumn INTEGER,\
+          keyWidthMultipler REAL,\
+          usesSpecialEnterShape INTEGER NOT NULL,\
+          keyTextPosition TEXT,\
+          shift TEXT,\
+          finger TEXT\
         )"
     );
 
     await db.run(
-      "CREATE TABLE IF NOT EXISTS userCharacterTbl (\
+      "CREATE TABLE IF NOT EXISTS userLessonCharacterTbl (\
         id INTEGER PRIMARY KEY AUTOINCREMENT,\
         timesCorrect INTEGER NOT NULL,\
         timesIncorrect INTEGER NOT NULL,\
         averageTimeToType REAL NOT NULL,\
-        userId INTEGER NOT NULL,\
+        userLessonId INTEGER NOT NULL,\
         characterSymbol TEXT NOT NULL,\
-        FOREIGN KEY (userId) REFERENCES userTbl(id),\
+        FOREIGN KEY (userLessonId) REFERENCES userLessonTbl(id),\
         FOREIGN KEY (characterSymbol) REFERENCES characterTbl(symbol)\
       );"
     );
@@ -382,12 +389,16 @@ class Database {
     wpm: number,
     accuracy: number,
     dateStarted: string,
-    correctKeys: string[],
-    incorrectKeys: string[]
+    characters: {
+      symbol: string;
+      timesCorrect: number;
+      timesIncorrect: number;
+      averageTimeToType: number;
+    }[]
   ) {
     const db = await this.open();
 
-    await db.run(
+    const userLesson = await db.run(
       "INSERT INTO userLessonTbl (userId, lessonId, rating, wpm, accuracy, dateStarted) VALUES ($userId, $lessonId, $rating, $wpm, $accuracy, $dateStarted)",
       {
         $userId: userId,
@@ -399,7 +410,31 @@ class Database {
       }
     );
 
+    characters.forEach(async (character) => {
+      await db.run(
+        "INSERT INTO userLessonCharacterTbl (userLessonId, characterSymbol, timesCorrect, timesIncorrect, averageTimeToType) VALUES ($userLessonId, $characterSymbol, $timesCorrect, $timesIncorrect, $averageTimeToType)",
+        {
+          $userLessonId: userLesson.lastID,
+          $characterSymbol: character.symbol,
+          $timesCorrect: character.timesCorrect,
+          $timesIncorrect: character.timesIncorrect,
+          $averageTimeToType: character.averageTimeToType,
+        }
+      );
+    });
+
     await this.close(db);
+  }
+
+  public static async getCharacters(): Promise<Character[]> {
+    const db = await this.open();
+
+    const characters: Character[] = await db.all(
+      "SELECT * FROM characterTbl WHERE keyboardRow IS NOT NULL AND keyboardColumn IS NOT NULL"
+    );
+
+    await this.close(db);
+    return characters;
   }
 }
 

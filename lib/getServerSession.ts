@@ -1,4 +1,4 @@
-import Database from "database/Database";
+import Database from "classes/Database";
 import { IncomingMessage } from "http";
 import { NextApiRequest } from "next";
 import { getCookie } from "./cookies";

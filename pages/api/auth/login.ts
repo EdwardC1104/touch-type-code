@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Database from "database/Database";
+import Database from "classes/Database";
 import { passwordIsValid } from "lib/passwords";
 import { issueJWT } from "lib/jwt";
 import { setCookie } from "lib/cookies";

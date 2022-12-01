@@ -1,4 +1,4 @@
-import Database from "database/Database";
+import Database from "classes/Database";
 import { getServerSession } from "lib/getServerSession";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
