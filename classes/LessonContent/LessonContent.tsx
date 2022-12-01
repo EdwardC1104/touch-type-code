@@ -1,4 +1,5 @@
 import { LinkedList } from "classes/LinkedList";
+import round from "lib/round";
 import ContentNode, { ContentNodeData } from "./ContentNode";
 import { LetterState } from "./LetterState";
 
@@ -121,6 +122,42 @@ export default class LessonContent extends LinkedList<
       currentNode = currentNode.next;
     }
     return null;
+  }
+
+  getKeysFormattedForResults() {
+    const keys: { [key: string]: any } = {};
+
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      const symbol = currentNode.getLetterOnKeyboard();
+      const timeToType = currentNode.getMsToType();
+      const state = currentNode.getState();
+
+      if (state === "IGNORE") continue;
+
+      if (!keys[symbol])
+        keys[symbol] = {
+          symbol,
+          averageTimeToType: round(timeToType),
+          timesCorrect: state === "CORRECT" ? 1 : 0,
+          timesIncorrect: state === "INCORRECT" ? 1 : 0,
+        };
+      else {
+        if (state === "CORRECT") keys[symbol].timesCorrect += 1;
+        else if (state === "INCORRECT") keys[symbol].timesIncorrect += 1;
+
+        const timesTyped =
+          keys[symbol].timesCorrect + keys[symbol].timesIncorrect;
+
+        keys[symbol].averageTimeToType =
+          round(keys[symbol].averageTimeToType * timesTyped + timeToType) /
+          (timesTyped + 1);
+      }
+
+      currentNode = currentNode.next;
+    }
+
+    return Object.values(keys);
   }
 
   /**

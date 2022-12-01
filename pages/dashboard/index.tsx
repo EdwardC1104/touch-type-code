@@ -1,6 +1,7 @@
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
 import getDashboardData from "lib/getDashboardData";
+import getBlankKeyboard from "lib/getBlankKeyboard";
 import { getServerSession } from "lib/getServerSession";
 import round from "lib/round";
 import type { GetServerSideProps, NextPage } from "next";
@@ -15,6 +16,7 @@ interface Props {
   accuracy: number;
   speedGraphData: { month: string; value: number }[];
   accuracyGraphData: { month: string; value: number }[];
+  keyboardLayout: Key[][];
 }
 
 const Dashboard: NextPage<Props> = ({
@@ -26,6 +28,7 @@ const Dashboard: NextPage<Props> = ({
   accuracy,
   speedGraphData,
   accuracyGraphData,
+  keyboardLayout,
 }) => {
   return (
     <>
@@ -85,7 +88,7 @@ const Dashboard: NextPage<Props> = ({
           />
         </div>
         <div className="mt-11 flex justify-center">
-          <Keyboard greenKeys={[]} orangeKeys={[]} redKeys={[]} />
+          <Keyboard layout={keyboardLayout} />
         </div>
       </div>
     </>
@@ -103,9 +106,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
 
   const data = await getDashboardData(user.id);
+  const keyboardLayout = await getBlankKeyboard();
 
   return {
-    props: { ...data },
+    props: { ...data, keyboardLayout },
   };
 };
 

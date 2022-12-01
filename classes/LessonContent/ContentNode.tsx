@@ -42,6 +42,10 @@ export default class ContentNode extends ListNode<
     this.data.msToType = msToType;
   }
 
+  public getMsToType(): number {
+    return this.data.msToType;
+  }
+
   /**
    * Gets the letter as set when the class was instantiated.
    */

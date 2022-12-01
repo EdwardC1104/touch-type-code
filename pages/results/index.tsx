@@ -1,6 +1,8 @@
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
 import Rating from "components/Rating";
+import addColorsToKeyboardLayout from "lib/addColorsToKeyboardLayout";
+import getBlankKeyboard from "lib/getBlankKeyboard";
 import round from "lib/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -14,6 +16,7 @@ interface Props {
   correctKeys?: string[];
   lessonName: string;
   courseName: string;
+  keyboardLayout: Key[][];
 }
 
 const Profile: NextPage<Props> = ({
@@ -24,6 +27,7 @@ const Profile: NextPage<Props> = ({
   correctKeys,
   lessonName,
   courseName,
+  keyboardLayout,
 }) => {
   const router = useRouter();
 
@@ -37,6 +41,13 @@ const Profile: NextPage<Props> = ({
   const onContinue = () => {
     router.push("/courses/[courseName]", `/courses/${courseName}`);
   };
+
+  const coloredKeyboardLayout = addColorsToKeyboardLayout(
+    keyboardLayout,
+    correctKeys,
+    undefined,
+    incorrectKeys
+  );
 
   return (
     <>
@@ -71,11 +82,7 @@ const Profile: NextPage<Props> = ({
           </div>
         </div>
         <div>
-          <Keyboard
-            greenKeys={correctKeys ?? []}
-            orangeKeys={[]}
-            redKeys={incorrectKeys ?? []}
-          />
+          <Keyboard layout={coloredKeyboardLayout} />
           <div className="flex justify-between mt-12">
             <button
               onClick={onTryAgain}
@@ -103,11 +110,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     query?.hasOwnProperty("accuracy") &&
     query?.hasOwnProperty("lessonName") &&
     query?.hasOwnProperty("courseName")
-  )
+  ) {
+    const keyboardLayout = await getBlankKeyboard();
     return {
-      props: { ...query },
+      props: { ...query, keyboardLayout },
     };
-  else
+  } else
     return {
       redirect: {
         destination: "/",

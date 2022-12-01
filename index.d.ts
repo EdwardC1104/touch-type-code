@@ -39,3 +39,22 @@ interface Lesson extends LessonData {
   wpm?: number;
   accuracy?: number;
 }
+
+interface Character {
+  symbol: string;
+  keyboardRow: number;
+  keyboardColumn: number;
+  keyWidthMultipler?: number;
+  usesSpecialEnterShape: boolean;
+  keyTextPosition: "top" | "bottom" | null;
+  shift: "left" | "right" | null;
+  finger: string | null;
+}
+
+interface Key {
+  topCharacter: string;
+  bottomCharacter: string;
+  widthMultipler?: number;
+  specialEnter?: boolean;
+  color?: string;
+}

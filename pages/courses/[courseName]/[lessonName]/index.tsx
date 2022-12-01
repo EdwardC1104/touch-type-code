@@ -1,17 +1,20 @@
 import LessonContent from "classes/LessonContent";
 import Keyboard from "components/Keyboard";
-import Database from "database/Database";
+import Database from "classes/Database";
 import { getServerSession } from "lib/getServerSession";
 import round from "lib/round";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { NextRouter, withRouter } from "next/router";
 import { Component } from "react";
+import getBlankKeyboard from "lib/getBlankKeyboard";
+import addColorsToKeyboardLayout from "lib/addColorsToKeyboardLayout";
 
 interface Props {
   user: User;
   lesson: Lesson;
   router: NextRouter;
+  keyboardLayout: Key[][];
 }
 
 interface State {
@@ -95,7 +98,9 @@ export class LessonPage extends Component<Props, State> {
     const correctKeys = this.contentLinkedList.getCorrectLettersForKeyboard();
     const dateStarted = new Date().toDateString();
 
-    const res = await fetch("/api/lesson/addResult", {
+    const keys = this.contentLinkedList.getKeysFormattedForResults();
+
+    await fetch("/api/lesson/addResult", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -107,8 +112,7 @@ export class LessonPage extends Component<Props, State> {
         accuracy,
         rating,
         dateStarted,
-        incorrectKeys,
-        correctKeys,
+        keys,
       }),
     });
 
@@ -161,7 +165,6 @@ export class LessonPage extends Component<Props, State> {
     const msToType = Date.now() - this.timeSinceLastKey;
     this.timeSinceLastKey = Date.now();
     currentLetter.setMsToType(msToType);
-    console.log(msToType);
 
     // Update the current letter's state.
     if (inputKey === currentLetter.getRawLetter())
@@ -207,8 +210,13 @@ export class LessonPage extends Component<Props, State> {
       .getCurrentLetter()
       ?.getLetterOnKeyboard();
     const shiftKey = this.contentLinkedList.getCurrentLetter()?.isShifted()
-      ? "shift"
+      ? "lshift"
       : undefined;
+
+    const keyboardLayout = addColorsToKeyboardLayout(
+      this.props.keyboardLayout,
+      [currentKey, shiftKey]
+    );
 
     return (
       <>
@@ -223,11 +231,7 @@ export class LessonPage extends Component<Props, State> {
             </pre>
           </div>
           <div className="flex justify-center mt-10">
-            <Keyboard
-              greenKeys={[currentKey, shiftKey]}
-              orangeKeys={[]}
-              redKeys={[]}
-            />
+            <Keyboard layout={keyboardLayout} />
           </div>
         </div>
       </>
@@ -259,10 +263,13 @@ export const getServerSideProps: GetServerSideProps = async ({
       notFound: true,
     };
 
+  const keyboardLayout = await getBlankKeyboard();
+
   return {
     props: {
       user,
       lesson,
+      keyboardLayout,
     },
   };
 };
