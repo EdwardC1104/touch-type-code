@@ -436,6 +436,20 @@ class Database {
     await this.close(db);
     return characters;
   }
+
+  public static async getCharacter(symbol: string): Promise<Character> {
+    const db = await this.open();
+
+    const character = await db.get(
+      "SELECT * FROM characterTbl WHERE symbol = $symbol",
+      {
+        $symbol: symbol,
+      }
+    );
+
+    await this.close(db);
+    return character;
+  }
 }
 
 export default Database;

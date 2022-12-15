@@ -5,6 +5,7 @@ import { getServerSession } from "lib/getServerSession";
 import round from "lib/round";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import { NextRouter, withRouter } from "next/router";
 import { Component } from "react";
 import getBlankKeyboard from "lib/getBlankKeyboard";
@@ -19,6 +20,9 @@ interface Props {
 
 interface State {
   practiceCodeSnippet: JSX.Element[];
+  leftHandDiagramUrl?: string;
+  rightHandDiagramUrl?: string;
+  shiftKey?: string;
 }
 
 export class LessonPage extends Component<Props, State> {
@@ -48,6 +52,8 @@ export class LessonPage extends Component<Props, State> {
     // The generated code snippet is stored in state so that the webpage re-renders every time it changes - which is every time a key is pressed.
     this.state = {
       practiceCodeSnippet: this.contentLinkedList.generateLetterElements(),
+      leftHandDiagramUrl: "/hands/L.png",
+      rightHandDiagramUrl: "/hands/R.png",
     };
   }
 
@@ -139,7 +145,7 @@ export class LessonPage extends Component<Props, State> {
    * Determines whether the key is correct or not and updates the linked list of letters accordingly.
    * Updates state with the newly generated code snippet so that the webpage re-renders.
    */
-  onKeyPress(event: KeyboardEvent): void | Promise<void> {
+  async onKeyPress(event: KeyboardEvent): Promise<void> {
     // If the user has just started typing, start the timer.
     if (this.startTime === null) this.startTime = Date.now();
 
@@ -178,17 +184,35 @@ export class LessonPage extends Component<Props, State> {
     // If the next letter is null, the user has finished the lesson.
     if (nextLetter === null) return this.onLessonFinish();
 
+    const fingerURL = await nextLetter.getHandDiagramUrls();
+    const shift = await nextLetter.getShiftKey();
+
     // Update the next letter's state to be the current letter.
     nextLetter.setState("CURRENT");
     this.setState({
       practiceCodeSnippet: this.contentLinkedList.generateLetterElements(),
+      leftHandDiagramUrl: fingerURL?.left,
+      rightHandDiagramUrl: fingerURL?.right,
+      shiftKey: shift,
     });
   }
 
   /**
    * Add the keypress event listener when the component is mounted.
    */
-  componentDidMount(): void {
+  async componentDidMount(): Promise<void> {
+    //! Get the finger diagram urls for the first letter.
+    const currentLetter = this.contentLinkedList.getCurrentLetter();
+    if (currentLetter !== null) {
+      const handDiagramUrls = await currentLetter.getHandDiagramUrls();
+      const shift = await currentLetter.getShiftKey();
+
+      this.setState({
+        leftHandDiagramUrl: handDiagramUrls?.left,
+        rightHandDiagramUrl: handDiagramUrls?.right,
+        shiftKey: shift,
+      });
+    }
     // The onKeyPress function needs to be scopped to the LessonPage class so that the 'this' keyword refers to the LessonPage class.
     this.onKeyPress = this.onKeyPress.bind(this);
     window.addEventListener("keypress", this.onKeyPress);
@@ -209,13 +233,14 @@ export class LessonPage extends Component<Props, State> {
     const currentKey = this.contentLinkedList
       .getCurrentLetter()
       ?.getLetterOnKeyboard();
-    const shiftKey = this.contentLinkedList.getCurrentLetter()?.isShifted()
-      ? "lshift"
-      : undefined;
+    // const shiftSide = this.contentLinkedList.getCurrentLetter()?.getShift();
+    // let shiftKey;
+    // if (shiftSide === "left") shiftKey = "lshift";
+    // else if (shiftSide === "right") shiftKey = "rshift";
 
     const keyboardLayout = addColorsToKeyboardLayout(
       this.props.keyboardLayout,
-      [currentKey, shiftKey]
+      [currentKey, this.state.shiftKey]
     );
 
     return (
@@ -230,8 +255,29 @@ export class LessonPage extends Component<Props, State> {
               {this.state.practiceCodeSnippet}
             </pre>
           </div>
-          <div className="flex justify-center mt-10">
+          <div className="flex justify-center mt-10 gap-8">
+            <picture>
+              <source srcSet={this.state.leftHandDiagramUrl} type="image/png" />
+              <img
+                src={this.state.leftHandDiagramUrl}
+                width={107}
+                height={207}
+                alt="diagram of left hand"
+              />
+            </picture>
             <Keyboard layout={keyboardLayout} />
+            <picture>
+              <source
+                srcSet={this.state.rightHandDiagramUrl}
+                type="image/png"
+              />
+              <img
+                src={this.state.rightHandDiagramUrl}
+                width={107}
+                height={207}
+                alt="diagram of right hand"
+              />
+            </picture>
           </div>
         </div>
       </>

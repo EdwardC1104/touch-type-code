@@ -1,6 +1,7 @@
 import Database from "classes/Database";
 
 const getBlankKeyboard = async () => {
+  // Template matrix for the blank keyboard
   const keyboard: Array<Key | null>[] = [...Array(5)].map(() =>
     [...Array(14)].map(() => null)
   );

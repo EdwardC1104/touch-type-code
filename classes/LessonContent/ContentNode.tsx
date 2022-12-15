@@ -1,5 +1,4 @@
 import { ListNode } from "classes/LinkedList";
-import doesKeyNeedShift from "lib/doesKeyNeedShift";
 import type { LetterState } from "./LetterState";
 
 /**
@@ -11,6 +10,11 @@ export type ContentNodeData = {
   letter: string;
   state: LetterState;
   msToType: number;
+  shift?: string;
+  fingerURL?: {
+    left: string;
+    right: string;
+  };
 };
 
 export default class ContentNode extends ListNode<
@@ -96,8 +100,9 @@ export default class ContentNode extends ListNode<
     return letterToDisplay;
   }
 
-  public getLetterOnKeyboard(): string {
-    let letterOnKeyboard = this.data.letter.toUpperCase();
+  public getLetterOnKeyboard(shouldChangeCase: boolean = true): string {
+    let letterOnKeyboard = this.data.letter;
+    if (shouldChangeCase) letterOnKeyboard = letterOnKeyboard.toUpperCase();
     switch (this.data.letter) {
       case "\t":
         letterOnKeyboard = "tab";
@@ -112,8 +117,48 @@ export default class ContentNode extends ListNode<
     return letterOnKeyboard;
   }
 
-  public isShifted(): boolean {
-    return doesKeyNeedShift(this.data.letter);
+  public async getShiftKey() {
+    if (typeof this.data.shift === "undefined") await this.setExtraLetterData();
+
+    return this.data.shift;
+  }
+
+  public async getHandDiagramUrls() {
+    if (typeof this.data.fingerURL === "undefined")
+      await this.setExtraLetterData();
+
+    return this.data.fingerURL;
+  }
+
+  async setExtraLetterData() {
+    try {
+      const res = await fetch("/api/lesson/getExtraLetterData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          letter: this.getLetterOnKeyboard(),
+        }),
+      });
+
+      const {
+        finger: { left, right },
+        shift,
+      } = await res.json();
+
+      this.data.fingerURL = {
+        left: `/hands/${left}.png`,
+        right: `/hands/${right}.png`,
+      };
+      this.data.shift = shift;
+    } catch (err) {
+      this.data.fingerURL = {
+        left: `/hands/L.png`,
+        right: `/hands/R.png`,
+      };
+      this.data.shift = "";
+    }
   }
 
   /**
