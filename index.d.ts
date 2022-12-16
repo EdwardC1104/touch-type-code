@@ -49,6 +49,7 @@ interface Character {
   keyTextPosition: "top" | "bottom" | null;
   shift: "left" | "right" | null;
   finger: string | null;
+  isHidden: 0 | 1;
 }
 
 interface Key {

@@ -13,6 +13,7 @@ const getExtraLetterData = async (
   }
 
   const character = await Database.getCharacter(letter);
+
   if (!character) {
     res.status(400).json({ message: "No character found" });
     return;

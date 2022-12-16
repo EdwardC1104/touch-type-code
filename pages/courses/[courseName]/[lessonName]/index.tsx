@@ -233,10 +233,6 @@ export class LessonPage extends Component<Props, State> {
     const currentKey = this.contentLinkedList
       .getCurrentLetter()
       ?.getLetterOnKeyboard();
-    // const shiftSide = this.contentLinkedList.getCurrentLetter()?.getShift();
-    // let shiftKey;
-    // if (shiftSide === "left") shiftKey = "lshift";
-    // else if (shiftSide === "right") shiftKey = "rshift";
 
     const keyboardLayout = addColorsToKeyboardLayout(
       this.props.keyboardLayout,

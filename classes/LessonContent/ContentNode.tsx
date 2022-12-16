@@ -138,7 +138,7 @@ export default class ContentNode extends ListNode<
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          letter: this.getLetterOnKeyboard(),
+          letter: this.getLetterOnKeyboard(false),
         }),
       });
 

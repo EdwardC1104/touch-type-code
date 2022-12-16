@@ -101,7 +101,8 @@ class Database {
           usesSpecialEnterShape INTEGER NOT NULL,\
           keyTextPosition TEXT,\
           shift TEXT,\
-          finger TEXT\
+          finger TEXT,\
+          isHidden INTEGER DEFAULT 0\
         )"
     );
 

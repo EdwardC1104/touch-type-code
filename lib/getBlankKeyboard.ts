@@ -8,7 +8,10 @@ const getBlankKeyboard = async () => {
 
   const characters = await Database.getCharacters();
 
-  characters.forEach((character) => {
+  // Don't show hidden characters (lowercase letters) on the keyboard
+  const visible = characters.filter((character) => character.isHidden === 0);
+
+  visible.forEach((character) => {
     const {
       keyboardRow,
       keyboardColumn,
