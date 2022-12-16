@@ -141,6 +141,9 @@ class Database {
     return user;
   }
 
+  /**
+   * Updates a user's data in the database.
+   */
   public static async editUser(user: Partial<User>): Promise<Partial<User>> {
     const db = await this.open();
 
@@ -159,6 +162,9 @@ class Database {
     return user;
   }
 
+  /**
+   * Updates a user's password in the database.
+   */
   public static async editUserPassword(
     user: Partial<User>
   ): Promise<Partial<User>> {

@@ -1,7 +1,8 @@
+// This file is used to configure the ESLint JavaScript linter to provide linting
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "react-hooks/exhaustive-deps": "off",
-    "no-console": "warn"
+    "react-hooks/exhaustive-deps": "off", // A useEffect() doesn't have to have a complete dependency list
+    "no-console": "warn" // Any console.log() will be a warning
   }
 }

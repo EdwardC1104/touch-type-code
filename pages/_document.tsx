@@ -1,5 +1,8 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
+/**
+ * A custom document is used to augment the app's <html>, <head>, and <body> tags.
+ */
 export default function Document() {
   return (
     <Html className="dark">

@@ -9,6 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        // Set Roboto as the default font family for the whole site
         sans: ["Roboto", ...defaultTheme.fontFamily.sans],
       },
     },
