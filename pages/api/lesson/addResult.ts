@@ -1,7 +1,9 @@
 import Database from "classes/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const addLessonResult = async (req: NextApiRequest, res: NextApiResponse) => {
+const addResult = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("Adding lesson result");
+
   if (req.method !== "POST")
     return res.status(405).json({ message: "Method not allowed" });
 
@@ -29,7 +31,9 @@ const addLessonResult = async (req: NextApiRequest, res: NextApiResponse) => {
     keys
   );
 
+  console.log("Added lesson result");
+
   return res.status(200).json({ message: "Success" });
 };
 
-export default addLessonResult;
+export default addResult;

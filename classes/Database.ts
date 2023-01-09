@@ -457,6 +457,35 @@ class Database {
     await this.close(db);
     return character;
   }
+
+  public static async getKeysForEveryLesson(userId: number): Promise<
+    {
+      symbol: string;
+      timesCorrect: number;
+      timesIncorrect: number;
+      averageTimeToType: number;
+      dateStarted: string;
+    }[]
+  > {
+    const db = await this.open();
+
+    const keys = await db.all(
+      "SELECT symbol, timesCorrect, timesIncorrect, averageTimeToType, dateStarted\
+      FROM characterTbl, userLessonCharacterTbl, userLessonTbl, lessonTbl\
+      WHERE\
+        characterTbl.symbol = userLessonCharacterTbl.characterSymbol\
+          AND userLessonCharacterTbl.userLessonId = userLessonTbl.id\
+          AND userLessonTbl.lessonId = lessonTbl.id\
+          and userId = $userId\
+      ORDER BY symbol;",
+      {
+        $userId: userId,
+      }
+    );
+
+    await this.close(db);
+    return keys;
+  }
 }
 
 export default Database;

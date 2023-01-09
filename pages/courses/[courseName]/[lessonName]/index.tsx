@@ -94,19 +94,30 @@ export class LessonPage extends Component<Props, State> {
   }
 
   async onLessonFinish(): Promise<void> {
+    console.log("Finished lesson");
+
     const { router } = this.props;
 
     const wpm = this.calculateWPM();
+    console.log("WPM: " + wpm);
+
     const accuracy = this.calculateAccuracy();
+    console.log("Accuracy: " + accuracy);
+
     const rating = this.calculateRating();
+    console.log("Rating: " + rating);
     const incorrectKeys =
       this.contentLinkedList.getIncorrectLettersForKeyboard();
+    console.log("Incorrect keys: " + incorrectKeys);
     const correctKeys = this.contentLinkedList.getCorrectLettersForKeyboard();
+    console.log("Correct keys: " + correctKeys);
     const dateStarted = new Date().toDateString();
+    console.log("Date started: " + dateStarted);
 
     const keys = this.contentLinkedList.getKeysFormattedForResults();
+    console.log("Keys: " + keys);
 
-    await fetch("/api/lesson/addResult", {
+    const res = await fetch("/api/lesson/addResult", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -121,6 +132,7 @@ export class LessonPage extends Component<Props, State> {
         keys,
       }),
     });
+    console.log("Response: " + res);
 
     router.push(
       {

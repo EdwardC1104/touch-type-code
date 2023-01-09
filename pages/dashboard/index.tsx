@@ -6,6 +6,7 @@ import { getServerSession } from "lib/getServerSession";
 import round from "lib/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import generateKeyboardHeatmap from "lib/generateKeyboardHeatmap";
 
 interface Props {
   streak: number;
@@ -106,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
 
   const data = await getDashboardData(user.id);
-  const keyboardLayout = await getBlankKeyboard();
+  const keyboardLayout = await generateKeyboardHeatmap(user.id);
 
   return {
     props: { ...data, keyboardLayout },
