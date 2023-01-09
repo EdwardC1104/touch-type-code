@@ -1,4 +1,4 @@
-import Database from "classes/Database";
+import Database from "classes/server/Database";
 import dayjs from "dayjs";
 import round from "lib/round";
 

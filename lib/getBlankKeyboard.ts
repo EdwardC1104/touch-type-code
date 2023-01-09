@@ -1,4 +1,4 @@
-import Database from "classes/Database";
+import Database from "classes/server/Database";
 
 const getBlankKeyboard = async () => {
   // Template matrix for the blank keyboard

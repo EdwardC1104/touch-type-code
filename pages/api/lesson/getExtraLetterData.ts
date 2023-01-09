@@ -1,4 +1,4 @@
-import Database from "classes/Database";
+import Database from "classes/server/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const getExtraLetterData = async (

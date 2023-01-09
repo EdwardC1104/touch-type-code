@@ -1,7 +1,7 @@
 import { passwordIsValid } from "lib/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dotenv from "dotenv";
-import Database from "classes/Database";
+import Database from "classes/server/Database";
 
 dotenv.config({ path: ".env.local" });
 

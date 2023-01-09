@@ -1,4 +1,4 @@
-import { ListNode } from "classes/LinkedList";
+import { ListNode } from "classes/client/LinkedList";
 import type { LetterState } from "./LetterState";
 
 /**

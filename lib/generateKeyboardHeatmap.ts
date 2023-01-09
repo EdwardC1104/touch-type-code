@@ -1,4 +1,4 @@
-import Database from "classes/Database";
+import Database from "classes/server/Database";
 import getBlankKeyboard from "./getBlankKeyboard";
 import {
   matrix,

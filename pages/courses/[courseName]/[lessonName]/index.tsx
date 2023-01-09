@@ -1,6 +1,6 @@
 import LessonContent from "classes/LessonContent";
 import Keyboard from "components/Keyboard";
-import Database from "classes/Database";
+import Database from "classes/server/Database";
 import { getServerSession } from "lib/getServerSession";
 import round from "lib/round";
 import type { GetServerSideProps } from "next";

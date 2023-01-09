@@ -1,4 +1,4 @@
-import { LinkedList } from "classes/LinkedList";
+import { LinkedList } from "classes/client/LinkedList";
 import round from "lib/round";
 import ContentNode, { ContentNodeData } from "./ContentNode";
 import { LetterState } from "./LetterState";
