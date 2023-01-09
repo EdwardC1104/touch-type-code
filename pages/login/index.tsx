@@ -48,7 +48,7 @@ const Login: NextPage = () => {
               }
               required
             />
-            <MyForm.Submit value="Sign up" />
+            <MyForm.Submit value="Login" />
             <MyForm.ErrorMessage>{globalErrorMessage}</MyForm.ErrorMessage>
           </MyForm.Form>
         </MyForm.Card>
