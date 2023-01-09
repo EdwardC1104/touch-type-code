@@ -1,5 +1,5 @@
 import useGoTo from "hooks/useGoTo";
-import { getServerSession } from "lib/getServerSession";
+import { getServerSession } from "lib/server/getServerSession";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import MyForm from "components/Form";

@@ -1,4 +1,4 @@
-import { passwordIsValid } from "lib/passwords";
+import { passwordIsValid } from "lib/server/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dotenv from "dotenv";
 import Database from "classes/server/Database";

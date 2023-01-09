@@ -1,7 +1,7 @@
-import emailValidator from "./validators/emailValidator";
-import nameValidator from "./validators/nameValidator";
-import passwordValidator from "./validators/passwordValidator";
-import usernameValidator from "./validators/usernameValidator";
+import emailValidator from "../shared/validators/emailValidator";
+import nameValidator from "../shared/validators/nameValidator";
+import passwordValidator from "../shared/validators/passwordValidator";
+import usernameValidator from "../shared/validators/usernameValidator";
 
 interface Values {
   username: string;

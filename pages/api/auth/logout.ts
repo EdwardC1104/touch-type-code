@@ -1,4 +1,4 @@
-import { setCookie } from "lib/cookies";
+import { setCookie } from "lib/server/cookies";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**

@@ -1,7 +1,7 @@
 import Database from "classes/server/Database";
-import { getServerSession } from "lib/getServerSession";
-import { generatePassword, passwordIsValid } from "lib/passwords";
-import passwordValidator from "lib/validators/passwordValidator";
+import { getServerSession } from "lib/server/getServerSession";
+import { generatePassword, passwordIsValid } from "lib/server/passwords";
+import passwordValidator from "lib/shared/validators/passwordValidator";
 import type { NextApiRequest, NextApiResponse } from "next";
 import logout from "../auth/logout";
 

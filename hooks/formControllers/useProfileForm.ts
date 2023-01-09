@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import validateProfileInputs from "lib/validateProfileInputs";
+import validateProfileInputs from "lib/client/validateProfileInputs";
 import { useState } from "react";
 import useGoTo from "../useGoTo";
 

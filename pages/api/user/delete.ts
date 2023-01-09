@@ -1,5 +1,5 @@
 import Database from "classes/server/Database";
-import { getServerSession } from "lib/getServerSession";
+import { getServerSession } from "lib/server/getServerSession";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**

@@ -1,12 +1,12 @@
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
-import getDashboardData from "lib/getDashboardData";
-import getBlankKeyboard from "lib/getBlankKeyboard";
-import { getServerSession } from "lib/getServerSession";
-import round from "lib/round";
+import getDashboardData from "lib/server/getDashboardData";
+import getBlankKeyboard from "lib/server/getBlankKeyboard";
+import { getServerSession } from "lib/server/getServerSession";
+import round from "lib/shared/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import generateKeyboardHeatmap from "lib/generateKeyboardHeatmap";
+import generateKeyboardHeatmap from "lib/server/generateKeyboardHeatmap";
 
 interface Props {
   streak: number;

@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import validateChangePasswordInputs from "lib/validateChangePasswordInputs";
+import validateChangePasswordInputs from "lib/client/validateChangePasswordInputs";
 import { useState } from "react";
 import useGoTo from "../useGoTo";
 

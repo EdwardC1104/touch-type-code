@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Database from "classes/server/Database";
-import { passwordIsValid } from "lib/passwords";
-import { issueJWT } from "lib/jwt";
-import { setCookie } from "lib/cookies";
+import { passwordIsValid } from "lib/server/passwords";
+import { issueJWT } from "lib/server/jwt";
+import { setCookie } from "lib/server/cookies";
 
 /**
  * API endpoint for logging in a user.

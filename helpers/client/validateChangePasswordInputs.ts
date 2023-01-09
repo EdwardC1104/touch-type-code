@@ -1,4 +1,4 @@
-import passwordValidator from "./validators/passwordValidator";
+import passwordValidator from "../shared/validators/passwordValidator";
 
 interface Values {
   password: string;
