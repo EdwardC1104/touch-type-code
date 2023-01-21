@@ -1,8 +1,8 @@
 import Database from "classes/server/Database";
-import { getServerSession } from "lib/server/getServerSession";
-import emailValidator from "lib/shared/validators/emailValidator";
-import nameValidator from "lib/shared/validators/nameValidator";
-import usernameValidator from "lib/shared/validators/usernameValidator";
+import { getServerSession } from "helpers/server/getServerSession";
+import emailValidator from "helpers/shared/validators/emailValidator";
+import nameValidator from "helpers/shared/validators/nameValidator";
+import usernameValidator from "helpers/shared/validators/usernameValidator";
 import type { NextApiRequest, NextApiResponse } from "next";
 import logout from "../auth/logout";
 

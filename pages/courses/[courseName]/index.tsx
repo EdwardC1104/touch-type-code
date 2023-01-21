@@ -1,5 +1,5 @@
 import Database from "classes/server/Database";
-import { getServerSession } from "lib/server/getServerSession";
+import { getServerSession } from "helpers/server/getServerSession";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";

@@ -1,6 +1,6 @@
 import Database from "classes/server/Database";
 import dayjs from "dayjs";
-import round from "lib/shared/round";
+import round from "helpers/shared/round";
 
 const getStreak = (set: Set<string>) => {
   const sortedDates = Array.from(set);

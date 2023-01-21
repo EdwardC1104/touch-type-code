@@ -1,4 +1,4 @@
-import { getServerSession } from "lib/server/getServerSession";
+import { getServerSession } from "helpers/server/getServerSession";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**

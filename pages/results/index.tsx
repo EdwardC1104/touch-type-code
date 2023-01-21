@@ -1,9 +1,9 @@
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
 import Rating from "components/Rating";
-import addColorsToKeyboardLayout from "lib/client/addColorsToKeyboardLayout";
-import getBlankKeyboard from "lib/server/getBlankKeyboard";
-import round from "lib/shared/round";
+import addColorsToKeyboardLayout from "helpers/client/addColorsToKeyboardLayout";
+import getBlankKeyboard from "helpers/server/getBlankKeyboard";
+import round from "helpers/shared/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
