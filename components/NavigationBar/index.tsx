@@ -16,11 +16,6 @@ const NavgiationBar = () => {
       href: "/courses",
       isCTA: false,
     },
-    // {
-    //   name: "Pricing",
-    //   href: "/pricing",
-    //   isCTA: false,
-    // },
   ];
 
   // I check whether the user is logged in using the 'userSession' value and not the
