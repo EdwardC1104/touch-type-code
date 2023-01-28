@@ -4,6 +4,7 @@ interface Props {
 }
 
 const Rating = ({ value, size }: Props) => {
+  // 'mouths' refers to which smiley face mouth to show on the star icon based on the rating
   const mouths = [
     <path
       key="1"

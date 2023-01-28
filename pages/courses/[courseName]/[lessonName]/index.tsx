@@ -93,28 +93,16 @@ export class LessonPage extends Component<Props, State> {
   }
 
   async onLessonFinish(): Promise<void> {
-    console.log("Finished lesson");
-
     const { router } = this.props;
 
     const wpm = this.calculateWPM();
-    console.log("WPM: " + wpm);
-
     const accuracy = this.calculateAccuracy();
-    console.log("Accuracy: " + accuracy);
-
     const rating = this.calculateRating();
-    console.log("Rating: " + rating);
     const incorrectKeys =
       this.contentLinkedList.getIncorrectLettersForKeyboard();
-    console.log("Incorrect keys: " + incorrectKeys);
     const correctKeys = this.contentLinkedList.getCorrectLettersForKeyboard();
-    console.log("Correct keys: " + correctKeys);
     const dateStarted = new Date().toDateString();
-    console.log("Date started: " + dateStarted);
-
     const keys = this.contentLinkedList.getKeysFormattedForResults();
-    console.log("Keys: " + keys);
 
     const res = await fetch("/api/lesson/addResult", {
       method: "POST",
@@ -131,7 +119,6 @@ export class LessonPage extends Component<Props, State> {
         keys,
       }),
     });
-    console.log("Response: " + res);
 
     router.push(
       {
@@ -212,7 +199,7 @@ export class LessonPage extends Component<Props, State> {
    * Add the keypress event listener when the component is mounted.
    */
   async componentDidMount(): Promise<void> {
-    //! Get the finger diagram urls for the first letter.
+    // Get the finger diagram urls for the first letter.
     const currentLetter = this.contentLinkedList.getCurrentLetter();
     if (currentLetter !== null) {
       const handDiagramUrls = await currentLetter.getHandDiagramUrls();
@@ -226,6 +213,8 @@ export class LessonPage extends Component<Props, State> {
     }
     // The onKeyPress function needs to be scopped to the LessonPage class so that the 'this' keyword refers to the LessonPage class.
     this.onKeyPress = this.onKeyPress.bind(this);
+    // Make sure that the event listener is only added once.
+
     window.addEventListener("keypress", this.onKeyPress);
   }
 

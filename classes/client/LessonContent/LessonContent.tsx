@@ -133,7 +133,10 @@ export default class LessonContent extends LinkedList<
       const timeToType = currentNode.getMsToType();
       const state = currentNode.getState();
 
-      if (state === "IGNORE") continue;
+      if (state === "IGNORE") {
+        currentNode = currentNode.next;
+        continue;
+      }
 
       if (!keys[symbol])
         keys[symbol] = {

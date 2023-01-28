@@ -5,7 +5,6 @@ const getExtraLetterData = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  console.log("Getting extra letter data");
   const { letter } = req.body;
 
   if (typeof letter !== "string" || !letter) {
