@@ -16,7 +16,7 @@ export default class LinkedList<
   /**
    * Adds a new node to the end of the linked list.
    */
-  public addNode(newNode: NodeType) {
+  protected addNode(newNode: NodeType) {
     // If the linked list is empty, make the new node the head.
     if (this.head === null) {
       this.head = newNode;

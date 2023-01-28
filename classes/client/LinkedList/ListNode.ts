@@ -17,7 +17,7 @@ export default class ListNode<DataType, NextType> {
     this.data = data;
   }
 
-  public getData(): DataType {
+  protected getData(): DataType {
     return this.data;
   }
 }
