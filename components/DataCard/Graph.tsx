@@ -32,7 +32,7 @@ const Graph = ({ data, color, id }: Props) => {
           strokeWidth={0}
           tickSize={14}
           style={{ fontSize: 14, color: "#A7A7A7" }}
-          domain={["datamin", "datamax"]}
+          domain={[0, "datamax"]}
         />
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
