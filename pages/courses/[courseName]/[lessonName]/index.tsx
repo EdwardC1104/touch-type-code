@@ -1,14 +1,14 @@
 import LessonContent from "classes/client/LessonContent";
-import Keyboard from "components/Keyboard";
 import Database from "classes/server/Database";
+import Keyboard from "components/Keyboard";
+import addColorsToKeyboardLayout from "helpers/client/addColorsToKeyboardLayout";
+import getBlankKeyboard from "helpers/server/getBlankKeyboard";
 import { getServerSession } from "helpers/server/getServerSession";
 import round from "helpers/shared/round";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import { NextRouter, withRouter } from "next/router";
 import { Component } from "react";
-import getBlankKeyboard from "helpers/server/getBlankKeyboard";
-import addColorsToKeyboardLayout from "helpers/client/addColorsToKeyboardLayout";
 
 interface Props {
   user: User;

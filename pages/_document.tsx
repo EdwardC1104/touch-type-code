@@ -1,4 +1,4 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Head, Html, Main, NextScript } from "next/document";
 
 /**
  * A custom document is used to augment the app's <html>, <head>, and <body> tags.

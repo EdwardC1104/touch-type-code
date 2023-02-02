@@ -1,9 +1,9 @@
-import "styles/globals.scss";
-import type { AppProps } from "next/app";
 import Layout from "components/Layout";
-import Head from "next/head";
 import Transition from "components/Transition";
 import SessionProvider from "context/Session/SessionProvider";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import "styles/globals.scss";
 
 /**
  * A wrapper for every page in the app.

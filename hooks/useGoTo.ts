@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 
 /**
  * React hook which returns a function that can be used to navigate to another page.
+ * Abstracts away the use of the Next.js router.
  */
 const useGoTo = (path: string) => {
   const router = useRouter();
