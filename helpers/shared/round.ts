@@ -3,8 +3,8 @@
  * The default is 0 decimal places.
  * There is no native JavaScript function for this.
  */
-const round = (value: number, precision: number = 0) => {
-  const multiplier = Math.pow(10, precision);
+const round = (value: number, decimalPlaces: number = 0) => {
+  const multiplier = Math.pow(10, decimalPlaces);
   return Math.round(value * multiplier) / multiplier;
 };
 

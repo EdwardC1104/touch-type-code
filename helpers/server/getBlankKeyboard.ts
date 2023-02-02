@@ -1,5 +1,9 @@
 import Database from "classes/server/Database";
 
+/**
+ * Returns a blank keyboard with the correct dimensions and the correct characters in the correct positions.
+ * It does not include any colors.
+ */
 const getBlankKeyboard = async () => {
   // Template matrix for the blank keyboard
   const keyboard: Array<Key | null>[] = [...Array(5)].map(() =>
@@ -33,7 +37,8 @@ const getBlankKeyboard = async () => {
     };
   });
 
-  return keyboard.map((row) => row.filter((key) => key !== null));
+  // Remove null values from the keyboard (they are only there to fill the matrix with the correct dimensions)
+  return keyboard.map((row) => row.filter((key) => key !== null)) as Key[][];
 };
 
 export default getBlankKeyboard;

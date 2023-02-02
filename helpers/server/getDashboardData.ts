@@ -1,35 +1,21 @@
 import Database from "classes/server/Database";
 import dayjs from "dayjs";
+import averageList from "helpers/shared/averageList";
 import round from "helpers/shared/round";
+import calculateStreak from "./calculateStreak";
 
-const getStreak = (set: Set<string>) => {
-  const sortedDates = Array.from(set);
-
-  let count = 0;
-  sortedDates.reverse().forEach((date: string, index) => {
-    const thisDate = dayjs(date).startOf("day");
-    const today = dayjs().startOf("day");
-    const pastDate = today.subtract(index, "day");
-
-    if (pastDate.isSame(thisDate)) count += 1;
-  });
-  return count;
-};
-
-const average = (
-  list: number[],
-  numberToAverage: number = 0,
-  precision: number = 0
-) => {
-  const speeds = list.slice(-numberToAverage);
-  const total = speeds.reduce((a, b) => a + b, 0);
-  return round(total / speeds.length, precision);
-};
-
+/**
+ * Gathers all the data needed to display statistics on the dashboard page.
+ * Then, performs the calculations needed to get useful values to show the user.
+ */
 const getDashboardData = async (userId: number) => {
+  // Get the best result a user has achieved for each lesson
   const bestResults = await Database.getLessons(undefined, userId);
+
+  // Get all the results a user has achieved
   const results = await Database.getResults(userId);
 
+  // Get the average rating of the best results
   let averageRating = 0;
   let bestResultsCount = 0;
   for (const result of bestResults) {
@@ -38,8 +24,12 @@ const getDashboardData = async (userId: number) => {
       bestResultsCount += 1;
     }
   }
-  averageRating = round(averageRating / bestResultsCount);
+  // Prevent division by zero bug if the user has no results
+  if (bestResultsCount > 0)
+    averageRating = round(averageRating / bestResultsCount);
 
+  // Get the average speed and accuracy from all their lessons
+  // Also make a list of unique dates they have completed lessons on
   let numberCompleted = 0;
   const setOfLessonDates: Set<string> = new Set();
   const listOfSpeeds: number[] = [];
@@ -97,9 +87,9 @@ const getDashboardData = async (userId: number) => {
     }
   }
   const daysActive = setOfLessonDates.size;
-  const streak = getStreak(setOfLessonDates);
-  const speed = average(listOfSpeeds, 3);
-  const accuracy = average(listOfAccuracies, 3, 2);
+  const streak = calculateStreak(setOfLessonDates);
+  const speed = averageList(listOfSpeeds, 3);
+  const accuracy = averageList(listOfAccuracies, 3, 2);
 
   return {
     averageRating,

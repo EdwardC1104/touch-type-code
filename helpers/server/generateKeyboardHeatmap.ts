@@ -21,6 +21,9 @@ import dayjs from "dayjs";
 import isAnomalous from "./isAnomalous";
 import boundMatrixColumn from "./boundMatrixColumn";
 
+/**
+ * Processes the data from the database and returns a keyboard layout with the correct key colors depending on the user's skill level for each key
+ */
 const generateKeyboardHeatmap = async (userId: number) => {
   // Database query to get all keys a user has ever typed
   const keys = await Database.getKeysForEveryLesson(userId);
