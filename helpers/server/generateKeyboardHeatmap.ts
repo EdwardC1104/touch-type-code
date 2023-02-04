@@ -1,25 +1,25 @@
 import Database from "classes/server/Database";
-import getBlankKeyboard from "./getBlankKeyboard";
+import dayjs from "dayjs";
 import {
-  matrix,
-  std as calcStandardDeviation,
-  index,
-  subset,
-  range,
-  mean,
+  add,
+  concat,
+  dotDivide,
+  dotMultiply,
   filter,
   flatten,
+  index,
+  matrix,
   Matrix,
+  mean,
+  range,
   reshape,
-  dotMultiply,
+  std as calcStandardDeviation,
+  subset,
   subtract,
-  add,
-  dotDivide,
-  concat,
 } from "mathjs";
-import dayjs from "dayjs";
-import isAnomalous from "./isAnomalous";
 import boundMatrixColumn from "./boundMatrixColumn";
+import getBlankKeyboard from "./getBlankKeyboard";
+import isAnomalous from "./isAnomalous";
 
 /**
  * Processes the data from the database and returns a keyboard layout with the correct key colors depending on the user's skill level for each key

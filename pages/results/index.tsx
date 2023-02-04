@@ -55,9 +55,9 @@ const Profile: NextPage<Props> = ({
         <title>Results</title>
       </Head>
       <div className="flex flex-col items-center">
-        <h2 className="font-bold text-2xl text-center mb-6">
+        <h1 className="font-bold text-2xl text-center mb-6">
           {rating > 2 ? "Well done!!" : "Practice makes perfect!"}
-        </h2>
+        </h1>
         <div className="flex mb-12">
           <Rating value={rating} size="large" />
         </div>
