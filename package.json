@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test:unit": "jest unit --coverage",
-    "test:e2e": "playwright test --headed"
+    "test:e2e": "playwright test --headed --workers=1",
+    "test": "pnpm run test:unit && pnpm run test:e2e"
   },
   "dependencies": {
     "@types/mathjs": "^9.4.2",
