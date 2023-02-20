@@ -117,12 +117,10 @@ export default class ContentNode extends ListNode<
     return letterOnKeyboard;
   }
 
-  public async getShiftKey() {
-    if (typeof this.data.shift === "undefined") await this.setExtraLetterData();
-
-    return this.data.shift;
-  }
-
+  /**
+   * Returns the URL of the hand diagram for the left and right hand.
+   * This data is fetched from the server.
+   */
   public async getHandDiagramUrls() {
     if (typeof this.data.fingerURL === "undefined")
       await this.setExtraLetterData();
@@ -130,17 +128,28 @@ export default class ContentNode extends ListNode<
     return this.data.fingerURL;
   }
 
+  /**
+   * Returns either "left" or "right" or undefined depending on which shift key is needed.
+   * This data is fetched from the server.
+   */
+  public async getShiftKey() {
+    if (typeof this.data.shift === "undefined") await this.setExtraLetterData();
+
+    return this.data.shift;
+  }
+
+  /**
+   * Fetches the extra data about the letter from the server and sets it to the data object.
+   */
   async setExtraLetterData() {
     try {
-      const res = await fetch("/api/lesson/getExtraLetterData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          letter: this.getLetterOnKeyboard(false),
-        }),
-      });
+      const letterInUnicode = this.getLetterOnKeyboard(false).charCodeAt(0);
+      const res = await fetch(
+        `/api/lesson/getExtraLetterData/${letterInUnicode}`,
+        {
+          method: "GET",
+        }
+      );
 
       const {
         finger: { left, right },

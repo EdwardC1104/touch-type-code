@@ -5,7 +5,18 @@ const getExtraLetterData = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { letter } = req.body;
+  if (req.method !== "GET") {
+    res.status(405).json({ message: "Invalid request method" });
+    return;
+  }
+
+  const { letterUnicode } = req.query;
+  if (typeof letterUnicode !== "string" || !letterUnicode) {
+    res.status(400).json({ message: "No letter provided" });
+    return;
+  }
+
+  const letter = String.fromCharCode(parseInt(letterUnicode));
 
   if (typeof letter !== "string" || !letter) {
     res.status(400).json({ message: "No letter provided" });
