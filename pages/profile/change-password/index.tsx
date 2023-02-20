@@ -1,8 +1,8 @@
+import MyForm from "components/Form";
 import { getServerSession } from "helpers/server/getServerSession";
+import useChangePasswordForm from "hooks/formControllers/useChangePasswordForm";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import MyForm from "components/Form";
-import useChangePasswordForm from "hooks/formControllers/useChangePasswordForm";
 
 const Profile: NextPage = () => {
   const { formController, globalErrorMessage } = useChangePasswordForm();
@@ -59,6 +59,7 @@ const Profile: NextPage = () => {
   );
 };
 
+// Server-side
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = await getServerSession(req);
   if (user)

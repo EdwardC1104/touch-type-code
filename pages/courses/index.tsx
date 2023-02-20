@@ -47,6 +47,7 @@ const Courses: NextPage<Props> = ({ courses }) => {
   );
 };
 
+// Static generation (SSG) for courses page
 export async function getStaticProps() {
   const courses = await Database.getCourses();
 

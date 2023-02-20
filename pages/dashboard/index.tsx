@@ -1,12 +1,11 @@
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
+import generateKeyboardHeatmap from "helpers/server/generateKeyboardHeatmap";
 import getDashboardData from "helpers/server/getDashboardData";
-import getBlankKeyboard from "helpers/server/getBlankKeyboard";
 import { getServerSession } from "helpers/server/getServerSession";
 import round from "helpers/shared/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import generateKeyboardHeatmap from "helpers/server/generateKeyboardHeatmap";
 
 interface Props {
   streak: number;
@@ -96,6 +95,7 @@ const Dashboard: NextPage<Props> = ({
   );
 };
 
+// Server-side
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = await getServerSession(req);
   if (!user)

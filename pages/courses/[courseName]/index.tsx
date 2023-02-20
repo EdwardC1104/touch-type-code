@@ -88,6 +88,7 @@ const Course: NextPage<Props> = ({ lessons }) => {
   );
 };
 
+// Server-side
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   params,

@@ -103,6 +103,7 @@ const Profile: NextPage<Props> = ({
   );
 };
 
+// Server-side
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (
     query?.hasOwnProperty("rating") &&

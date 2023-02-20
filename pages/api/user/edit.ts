@@ -24,6 +24,7 @@ export default async function handler(
 
   const { name, username, email } = req.body;
 
+  // Validate the user's input before adding them to the database
   const nameError = nameValidator(name);
   if (nameError) return res.status(400).json({ error: nameError });
 
@@ -33,6 +34,7 @@ export default async function handler(
   const usernameError = usernameValidator(username);
   if (usernameError) return res.status(400).json({ error: usernameError });
 
+  // Make sure the user is logged in
   const user = await getServerSession(req);
   if (!user) return res.status(401).json({ error: "Unauthorized" });
 

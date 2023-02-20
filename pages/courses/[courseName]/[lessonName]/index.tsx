@@ -281,7 +281,7 @@ export class LessonPage extends Component<Props, State> {
   }
 }
 
-// Server side
+// Server-side
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   params,

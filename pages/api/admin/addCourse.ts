@@ -1,7 +1,7 @@
+import Database from "classes/server/Database";
+import dotenv from "dotenv";
 import { passwordIsValid } from "helpers/server/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
-import dotenv from "dotenv";
-import Database from "classes/server/Database";
 
 dotenv.config({ path: ".env.local" });
 

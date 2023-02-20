@@ -1,11 +1,11 @@
-import useGoTo from "hooks/useGoTo";
+import MyForm from "components/Form";
 import { getServerSession } from "helpers/server/getServerSession";
+import useProfileForm from "hooks/formControllers/useProfileForm";
+import useGoTo from "hooks/useGoTo";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import MyForm from "components/Form";
-import useProfileForm from "hooks/formControllers/useProfileForm";
-import { useEffect } from "react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 interface Props {
   user: User;
@@ -106,6 +106,7 @@ const Profile: NextPage<Props> = ({ user }) => {
   );
 };
 
+// Server-side
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = await getServerSession(req);
   if (user)
