@@ -45,6 +45,7 @@ test("should display the correct data on the dashboard", async ({ page }) => {
 
   // expect a redirect to the results page
   await expect(page).toHaveURL("http://localhost:3000/results");
+
   // --------------------- DASHBOARD ---------------------
 
   // click the dashboard link
