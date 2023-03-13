@@ -1,7 +1,7 @@
+import Database from "classes/server/Database";
+import dotenv from "dotenv";
 import { passwordIsValid } from "helpers/server/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
-import dotenv from "dotenv";
-import Database from "classes/server/Database";
 
 dotenv.config({ path: ".env.local" });
 
@@ -13,6 +13,7 @@ type Data = {
 /**
  * API endpoint for creating a new lesson.
  * Expects a JSON body with the lessons's name, description, image and adminPassword.
+ * @method POST
  */
 export default async function handler(
   req: NextApiRequest,

@@ -1,6 +1,10 @@
 import Database from "classes/server/Database";
 import { NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * Get extra letter data
+ * @method GET
+ */
 const getExtraLetterData = async (
   req: NextApiRequest,
   res: NextApiResponse

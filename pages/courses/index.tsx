@@ -8,6 +8,9 @@ interface Props {
   courses: Course[];
 }
 
+/**
+ * @Path /courses
+ */
 const Courses: NextPage<Props> = ({ courses }) => {
   return (
     <>

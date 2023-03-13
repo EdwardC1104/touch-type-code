@@ -46,6 +46,9 @@ const StarRating = ({ rating }: { rating: 0 | 1 | 2 | 3 | 4 | 5 }) => {
   return <div className="flex">{stars}</div>;
 };
 
+/**
+ * @Path /courses/[courseName]
+ */
 const Course: NextPage<Props> = ({ lessons }) => {
   const router = useRouter();
 

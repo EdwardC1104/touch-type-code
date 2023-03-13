@@ -19,7 +19,10 @@ interface Props {
   keyboardLayout: Key[][];
 }
 
-const Profile: NextPage<Props> = ({
+/**
+ * @Path /results
+ */
+const Results: NextPage<Props> = ({
   wpm,
   accuracy,
   rating,
@@ -125,4 +128,4 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     };
 };
 
-export default Profile;
+export default Results;

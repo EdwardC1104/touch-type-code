@@ -1,8 +1,11 @@
 import MyForm from "components/Form";
+import useLoginForm from "hooks/formControllers/useLoginForm";
 import type { NextPage } from "next";
 import Head from "next/head";
-import useLoginForm from "hooks/formControllers/useLoginForm";
 
+/**
+ * @Path /login
+ */
 const Login: NextPage = () => {
   const { formController, globalErrorMessage } = useLoginForm();
 

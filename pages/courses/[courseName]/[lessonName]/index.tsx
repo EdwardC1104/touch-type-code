@@ -24,6 +24,9 @@ interface State {
   shiftKey?: string;
 }
 
+/**
+ * @Path /courses/[courseName]/[lessonName]
+ */
 export class LessonPage extends Component<Props, State> {
   /**
    * Used to keep track of the user's wpm.

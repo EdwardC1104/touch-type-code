@@ -4,7 +4,10 @@ import useChangePasswordForm from "hooks/formControllers/useChangePasswordForm";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 
-const Profile: NextPage = () => {
+/**
+ * @Path /profile/change-password
+ */
+const ChangePassword: NextPage = () => {
   const { formController, globalErrorMessage } = useChangePasswordForm();
 
   return (
@@ -75,4 +78,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
 };
 
-export default Profile;
+export default ChangePassword;

@@ -11,6 +11,9 @@ interface Props {
   user: User;
 }
 
+/**
+ * @Path /profile
+ */
 const Profile: NextPage<Props> = ({ user }) => {
   const goToHome = useGoTo("/");
 

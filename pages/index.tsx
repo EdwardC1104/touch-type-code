@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 /**
- * Path: /
+ * @Path /
  */
 const Home: NextPage = () => {
   const goToSignUp = useGoTo("/signup");

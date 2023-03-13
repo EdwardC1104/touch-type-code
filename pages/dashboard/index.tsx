@@ -19,6 +19,9 @@ interface Props {
   keyboardLayout: Key[][];
 }
 
+/**
+ * @Path /dashboard
+ */
 const Dashboard: NextPage<Props> = ({
   streak,
   daysActive,

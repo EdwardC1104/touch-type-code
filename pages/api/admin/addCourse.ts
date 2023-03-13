@@ -13,6 +13,7 @@ type Data = {
 /**
  * API endpoint for creating a new course.
  * Expects a JSON body with the course's name, description, image and adminPassword.
+ * @method POST
  */
 export default async function handler(
   req: NextApiRequest,
