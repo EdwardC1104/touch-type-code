@@ -1,21 +1,20 @@
+"use client";
+
 import MyForm from "components/Form";
-import { getServerSession } from "helpers/server/getServerSession";
 import useProfileForm from "hooks/formControllers/useProfileForm";
 import useGoTo from "hooks/useGoTo";
-import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
+import useSession from "hooks/useSession";
+import type { NextPage } from "next";
 import Link from "next/link";
 import { useEffect } from "react";
-
-interface Props {
-  user: User;
-}
 
 /**
  * @Path /profile
  */
-const Profile: NextPage<Props> = ({ user }) => {
+const Profile: NextPage = () => {
   const goToHome = useGoTo("/");
+
+  const { userSession, status } = useSession();
 
   const deleteAccount = async () => {
     const res = await fetch("/api/user/delete", { method: "DELETE" });
@@ -27,17 +26,21 @@ const Profile: NextPage<Props> = ({ user }) => {
 
   useEffect(() => {
     formController.setValues({
-      name: user.name,
-      email: user.email,
-      username: user.username,
+      name: userSession.name,
+      email: userSession.email,
+      username: userSession.username,
     });
-  }, []);
+  }, [userSession, status]);
+
+  // if (status === "loading" || status === "unauthenticated")
+  //   return (
+  //     <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
 
   return (
     <>
-      <Head>
-        <title>Profile</title>
-      </Head>
       <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
         <MyForm.Card>
           <MyForm.Title>Profile</MyForm.Title>
@@ -107,24 +110,6 @@ const Profile: NextPage<Props> = ({ user }) => {
       </div>
     </>
   );
-};
-
-// Server-side
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const user = await getServerSession(req);
-  if (user)
-    return {
-      props: {
-        user,
-      },
-    };
-  else
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
 };
 
 export default Profile;

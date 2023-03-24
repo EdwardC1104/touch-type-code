@@ -1,24 +1,16 @@
 import Database from "classes/server/Database";
-import { IncomingMessage } from "http";
-import { NextApiRequest } from "next";
-import { getCookie } from "./cookies";
+import { NextRequest } from "next/server";
 import { verifyJWT } from "./jwt";
-
-type Request = IncomingMessage & {
-  cookies: Partial<{
-    [key: string]: string;
-  }>;
-};
 
 /**
  * Uses the JWT in the request to find the user's id.
  * Then, it gets the user's data from the database.
  */
-export const getServerSession = async (req: Request) => {
-  let token = getCookie(req as NextApiRequest, "jwt");
+export const getServerSession = async (req: NextRequest) => {
+  const token = req.cookies.get("jwt");
   if (!token) return null; // No token, no session
 
-  const { sub: id } = verifyJWT(token);
+  const { sub: id } = verifyJWT(token.value);
   if (!id) return null; // Invalid token, no session
 
   const user = await Database.getUserById(parseInt(id));

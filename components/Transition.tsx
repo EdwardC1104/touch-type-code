@@ -1,12 +1,14 @@
+"use client";
+
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 interface Props {
   children: React.ReactNode;
 }
 
 const Transition = ({ children }: Props) => {
-  const { asPath } = useRouter();
+  const pathname = usePathname();
 
   const variants = {
     out: {
@@ -28,7 +30,7 @@ const Transition = ({ children }: Props) => {
   return (
     <AnimatePresence initial={false} mode="wait">
       <motion.div
-        key={asPath}
+        key={pathname}
         className="top-level-div"
         variants={variants}
         animate="in"

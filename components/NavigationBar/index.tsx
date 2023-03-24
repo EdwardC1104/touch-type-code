@@ -1,14 +1,17 @@
+"use client";
+
 import useSession from "hooks/useSession";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const NavgiationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { userSession } = useSession();
+  const { userSession, status } = useSession();
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const links = [
     {
@@ -121,23 +124,22 @@ const NavgiationBar = () => {
                 );
               else if (link.href === "/logout")
                 return (
-                  <Link href={link.href} key={link.name}>
-                    <a
-                      key={link.name}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        await fetch("/api/auth/logout", {
-                          method: "POST",
-                        });
-                        router.reload();
-                      }}
-                      className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
-                    >
-                      {link.name}
-                    </a>
+                  <Link
+                    href={link.href}
+                    key={link.name}
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await fetch("/api/auth/logout", {
+                        method: "POST",
+                      });
+                      router.refresh();
+                    }}
+                    className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
+                  >
+                    {link.name}
                   </Link>
                 );
-              else if (router.asPath !== link.href)
+              else if (pathname !== link.href)
                 return (
                   <button
                     key={link.name}

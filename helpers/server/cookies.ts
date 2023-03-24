@@ -1,4 +1,4 @@
-import { serialize, parse } from "cookie";
+import { parse, serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**

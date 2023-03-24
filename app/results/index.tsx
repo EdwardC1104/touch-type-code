@@ -1,3 +1,5 @@
+"use client";
+
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
 import Rating from "components/Rating";
@@ -6,7 +8,7 @@ import getBlankKeyboard from "helpers/server/getBlankKeyboard";
 import round from "helpers/shared/round";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface Props {
   rating: 0 | 1 | 2 | 3 | 4 | 5;
@@ -35,14 +37,16 @@ const Results: NextPage<Props> = ({
   const router = useRouter();
 
   const onTryAgain = () => {
-    router.push(
-      "/courses/[courseName]/[lessonName]",
-      `/courses/${courseName}/${lessonName}`
-    );
+    // router.push(
+    //   "/courses/[courseName]/[lessonName]",
+    //   `/courses/${courseName}/${lessonName}`
+    // );
+    router.push(`/courses/${courseName}/${lessonName}`);
   };
 
   const onContinue = () => {
-    router.push("/courses/[courseName]", `/courses/${courseName}`);
+    // router.push("/courses/[courseName]", `/courses/${courseName}`);
+    router.push(`/courses/${courseName}`);
   };
 
   const coloredKeyboardLayout = addColorsToKeyboardLayout(

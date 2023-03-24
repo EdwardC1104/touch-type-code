@@ -1,4 +1,5 @@
 import Database from "classes/server/Database";
+import Breadcrumbs from "components/Breadcrumbs";
 import { getServerSession } from "helpers/server/getServerSession";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -54,41 +55,40 @@ const Course: NextPage<Props> = ({ lessons }) => {
 
   const courseName = router.query.courseName as string;
 
-  return (
-    <>
-      <Head>
-        <title>{courseName}</title>
-      </Head>
-      <div className="flex flex-wrap justify-center content-center items-center">
-        {lessons.map(({ name, description, background, rating }) => (
+  return <>
+    <Head>
+      <title>{courseName}</title>
+    </Head>
+    <Breadcrumbs />
+    <div className="flex flex-wrap justify-center content-center items-center">
+      {lessons.map(({ name, description, background, rating }) => (
+        <div
+          key={name}
+          className="bg-neutral-900 rounded-2xl sm:w-[16rem] w-full my-4 drop-shadow-lg flex flex-col mx-12"
+        >
           <div
-            key={name}
-            className="bg-neutral-900 rounded-2xl sm:w-[16rem] w-full my-4 drop-shadow-lg flex flex-col mx-12"
+            className="w-full flex justify-center items-center flex-col rounded-t-3xl rounded-b-lg shadow-md"
+            style={{ background }}
           >
-            <div
-              className="w-full flex justify-center items-center flex-col rounded-t-3xl rounded-b-lg shadow-md"
-              style={{ background }}
-            >
-              <h2 className="font-bold font-mono text-9xl mt-6 mb-1 text-white/50 text-center">
-                {name}
-              </h2>
-              <h3 className="font-bold font-mono text-xl text-white/50 mb-4 text-center">
-                {description}
-              </h3>
-            </div>
-            <div className="flex justify-between items-center py-3 px-4 flex-row-reverse">
-              <Link href={`/courses/${courseName}/${name}`}>
-                <button className="font-medium text-white block bg-green-600 hover:bg-green-700 focus:bg-green-700 py-0.5 px-5 rounded-lg text-center max-w-fit self-end">
-                  {rating ? "Repeat" : "Begin"}
-                </button>
-              </Link>
-              {typeof rating === "number" && <StarRating rating={rating} />}
-            </div>
+            <h2 className="font-bold font-mono text-9xl mt-6 mb-1 text-white/50 text-center">
+              {name}
+            </h2>
+            <h3 className="font-bold font-mono text-xl text-white/50 mb-4 text-center">
+              {description}
+            </h3>
           </div>
-        ))}
-      </div>
-    </>
-  );
+          <div className="flex justify-between items-center py-3 px-4 flex-row-reverse">
+            <Link href={`/courses/${courseName}/${name}`} legacyBehavior>
+              <button className="font-medium text-white block bg-green-600 hover:bg-green-700 focus:bg-green-700 py-0.5 px-5 rounded-lg text-center max-w-fit self-end">
+                {rating ? "Repeat" : "Begin"}
+              </button>
+            </Link>
+            {typeof rating === "number" && <StarRating rating={rating} />}
+          </div>
+        </div>
+      ))}
+    </div>
+  </>;
 };
 
 // Server-side

@@ -1,8 +1,8 @@
+"use client";
+
 import MyForm from "components/Form";
-import { getServerSession } from "helpers/server/getServerSession";
 import useChangePasswordForm from "hooks/formControllers/useChangePasswordForm";
-import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
+import type { NextPage } from "next";
 
 /**
  * @Path /profile/change-password
@@ -12,9 +12,6 @@ const ChangePassword: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Change Password</title>
-      </Head>
       <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
         <MyForm.Card>
           <MyForm.Title>Change Password</MyForm.Title>
@@ -60,22 +57,6 @@ const ChangePassword: NextPage = () => {
       </div>
     </>
   );
-};
-
-// Server-side
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const user = await getServerSession(req);
-  if (user)
-    return {
-      props: {},
-    };
-  else
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
 };
 
 export default ChangePassword;

@@ -1,3 +1,5 @@
+"use client";
+
 import MyForm from "components/Form";
 import useLoginForm from "hooks/formControllers/useLoginForm";
 import type { NextPage } from "next";

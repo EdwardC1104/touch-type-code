@@ -26,7 +26,7 @@ const useChangePasswordForm = () => {
     // Handle form submission
     onSubmit: async (values, { setSubmitting }) => {
       // Send a POST request to the API to change the user's password
-      const res = await fetch("/api/auth/changePassword", {
+      const res = await fetch("/api/auth/change-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
