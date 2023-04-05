@@ -1,4 +1,4 @@
-import Database from "classes/server/Database";
+import fetchCharacters from "data/fetchCharacters";
 
 /**
  * Returns a blank keyboard with the correct dimensions and the correct characters in the correct positions.
@@ -10,10 +10,10 @@ const getBlankKeyboard = async () => {
     [...Array(14)].map(() => null)
   );
 
-  const characters = await Database.getCharacters();
+  const characters = await fetchCharacters();
 
   // Don't show hidden characters (lowercase letters) on the keyboard
-  const visible = characters.filter((character) => character.isHidden === 0);
+  const visible = characters.filter((character) => !character.isHidden);
 
   visible.forEach((character) => {
     const {

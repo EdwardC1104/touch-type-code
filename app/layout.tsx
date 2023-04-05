@@ -1,5 +1,5 @@
 import NavgiationBar from "components/NavigationBar";
-import SessionProvider from "context/Session/SessionProvider";
+import { AuthContextProvider } from "context/Session/AuthContextProvider";
 import "styles/globals.scss";
 
 export const metadata = {
@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html className="dark" lang="en">
       <body>
-        <SessionProvider>
+        <AuthContextProvider>
           <div className="top-level-div">
             <NavgiationBar />
             <main className="flex flex-auto flex-col self-center max-w-screen-xl w-full">
@@ -25,7 +25,7 @@ export default function RootLayout({
               </div>
             </main>
           </div>
-        </SessionProvider>
+        </AuthContextProvider>
       </body>
     </html>
   );

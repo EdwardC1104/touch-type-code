@@ -1,62 +1,18 @@
 "use client";
 
-import useSession from "hooks/useSession";
+import logout from "auth/logout";
+import OnlyShowAuthenticatedUsers from "components/OnlyShowAuthenticatedUsers";
+import OnlyShowUnauthenticatedUsers from "components/OnlyShowUnauthenticatedUsers";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const NavgiationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { userSession, status } = useSession();
-
-  const router = useRouter();
   const pathname = usePathname();
 
-  const links = [
-    {
-      name: "Courses",
-      href: "/courses",
-      isCTA: false,
-    },
-  ];
-
-  // I check whether the user is logged in using the 'userSession' value and not the
-  // 'status' value because the 'status' may be "loading" which causes flickering on every
-  // url change. The 'userSession' value could be stale but this isn't an issue here.
-  if (userSession) {
-    links.push({
-      name: "Dashboard",
-      href: "/dashboard",
-      isCTA: false,
-    });
-
-    links.push({
-      name: "Profile",
-      href: "/profile",
-      isCTA: false,
-    });
-
-    links.push({
-      name: "Logout",
-      href: "/logout",
-      isCTA: false,
-    });
-  } else {
-    links.push({
-      name: "Login",
-      href: "/login",
-      isCTA: false,
-    });
-
-    links.push({
-      name: "Sign up",
-      href: "/signup",
-      isCTA: true,
-    });
-  }
-  const navigate = (href: string) => {
-    router.push(href);
+  const close = () => {
     setIsOpen(false);
   };
 
@@ -67,12 +23,13 @@ const NavgiationBar = () => {
         aria-label="Global"
       >
         <div className="flex items-center justify-between">
-          <button
-            onClick={() => navigate("/")}
+          <Link
+            href="/"
+            onClick={close}
             className="flex-none text-xl font-semibold text-white"
           >
             touch type code
-          </button>
+          </Link>
           <div className="sm:hidden">
             <button
               type="button"
@@ -111,55 +68,66 @@ const NavgiationBar = () => {
           } transition-all duration-300 basis-full grow sm:block `}
         >
           <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:pl-5">
-            {links.map((link) => {
-              if (link.isCTA)
-                return (
-                  <button
-                    key={link.name}
-                    onClick={() => navigate(link.href)}
-                    className="font-medium text-white block bg-green-600 hover:bg-green-700 focus:bg-green-700 py-1.5 px-4 rounded-md text-center max-w-fit self-center"
-                  >
-                    {link.name}
-                  </button>
-                );
-              else if (link.href === "/logout")
-                return (
-                  <Link
-                    href={link.href}
-                    key={link.name}
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      await fetch("/api/auth/logout", {
-                        method: "POST",
-                      });
-                      router.refresh();
-                    }}
-                    className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
-                  >
-                    {link.name}
-                  </Link>
-                );
-              else if (pathname !== link.href)
-                return (
-                  <button
-                    key={link.name}
-                    onClick={() => navigate(link.href)}
-                    className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
-                  >
-                    {link.name}
-                  </button>
-                );
-              else
-                return (
-                  <button
-                    key={link.name}
-                    onClick={() => navigate(link.href)}
-                    className="font-medium text-green-400 text-center"
-                  >
-                    {link.name}
-                  </button>
-                );
-            })}
+            <Link
+              href="/courses"
+              onClick={close}
+              className={`font-medium  hover:text-neutral-400 text-center ${
+                pathname === "/courses" ? "text-green-400" : "text-neutral-300"
+              }`}
+            >
+              Courses
+            </Link>
+            <OnlyShowAuthenticatedUsers>
+              <Link
+                href="/dashboard"
+                onClick={close}
+                className={`font-medium  hover:text-neutral-400 text-center ${
+                  pathname === "/dashboard"
+                    ? "text-green-400"
+                    : "text-neutral-300"
+                }`}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/profile"
+                onClick={close}
+                className={`font-medium  hover:text-neutral-400 text-center ${
+                  pathname === "/profile"
+                    ? "text-green-400"
+                    : "text-neutral-300"
+                }`}
+              >
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  logout();
+                  close();
+                }}
+                className="font-medium text-neutral-300 hover:text-neutral-400 text-center"
+              >
+                Logout
+              </button>
+            </OnlyShowAuthenticatedUsers>
+            <OnlyShowUnauthenticatedUsers>
+              <Link
+                href="/login"
+                onClick={close}
+                className={`font-medium text-neutral-300 hover:text-neutral-400 text-center ${
+                  pathname === "/login" ? "text-green-400" : "text-neutral-300"
+                }`}
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                onClick={close}
+                className="font-medium text-white block bg-green-600 hover:bg-green-700 focus:bg-green-700 py-1.5 px-4 rounded-md text-center max-w-fit self-center"
+              >
+                Sign up
+              </Link>
+            </OnlyShowUnauthenticatedUsers>
           </div>
         </div>
       </nav>

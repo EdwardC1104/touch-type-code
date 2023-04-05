@@ -1,4 +1,4 @@
-import Database from "classes/server/Database";
+import storeLesson from "data/storeLesson";
 import dotenv from "dotenv";
 import { passwordIsValid } from "helpers/server/passwords";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -49,12 +49,11 @@ export default async function handler(
     });
 
   try {
-    await Database.addLesson({
+    await storeLesson(courseName, {
       name,
       description,
       background,
       content,
-      courseName,
     });
 
     res.status(200).json({

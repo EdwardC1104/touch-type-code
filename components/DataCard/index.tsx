@@ -1,13 +1,12 @@
 import Rating from "components/Rating";
 import Image from "next/image";
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import Graph from "./Graph";
 
 interface Props {
   title: string;
   iconPath: string;
   iconAlt: string;
-  value: number;
+  value: string;
   unit: string;
   large?: boolean;
   rating?: boolean;
@@ -47,7 +46,7 @@ const DataCard = ({
           <div className="flex-1 flex items-center">
             {rating ? (
               <div className="flex justify-center flex-1">
-                <Rating value={value} size="medium" />
+                <Rating value={parseInt(value)} size="medium" />
               </div>
             ) : (
               <p className="text-5xl font-medium">

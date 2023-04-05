@@ -1,4 +1,6 @@
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from "recharts";
+"use client";
+
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 interface Props {
   id: string;

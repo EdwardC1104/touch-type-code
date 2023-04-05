@@ -1,61 +1,64 @@
 "use client";
 
+import sso from "auth/sso";
 import MyForm from "components/Form";
-import useLoginForm from "hooks/formControllers/useLoginForm";
+import useGoTo from "hooks/useGoTo";
 import type { NextPage } from "next";
-import Head from "next/head";
+import Image from "next/image";
+import { useState } from "react";
 
 /**
  * @Path /login
  */
 const Login: NextPage = () => {
-  const { formController, globalErrorMessage } = useLoginForm();
+  const goToCourses = useGoTo("/courses");
+
+  const [globalError, setGlobalError] = useState<string | null>(null);
+
+  const signUpWithSSO = async (provider: string) => {
+    const { error } = await sso(provider);
+    if (error) setGlobalError(error);
+    else {
+      setGlobalError(null);
+      goToCourses();
+    }
+  };
 
   return (
     <>
-      <Head>
-        <title>Login</title>
-      </Head>
       <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
         <MyForm.Card>
           <MyForm.Title>Login</MyForm.Title>
           <MyForm.Subtitle>
-            Enter your credentials to access your account.
+            Select the service you wish to login with.
           </MyForm.Subtitle>
-          <MyForm.Form onSubmit={formController.handleSubmit}>
-            <MyForm.Input
-              label="Username"
-              name="username"
-              type="username"
-              id="username"
-              placeholder="Enter a username"
-              onChange={formController.handleChange}
-              value={formController.values.username}
-              error={formController.errors.username}
-              touched={formController.touched.username}
-              setTouched={() =>
-                formController.setFieldTouched("username", true, true)
-              }
-              required
-            />
-            <MyForm.Input
-              label="Password"
-              name="password"
-              type="password"
-              id="password"
-              placeholder="Enter a password"
-              onChange={formController.handleChange}
-              value={formController.values.password}
-              error={formController.errors.password}
-              touched={formController.touched.password}
-              setTouched={() =>
-                formController.setFieldTouched("password", true, true)
-              }
-              required
-            />
-            <MyForm.Submit value="Login" />
-            <MyForm.ErrorMessage>{globalErrorMessage}</MyForm.ErrorMessage>
-          </MyForm.Form>
+          <MyForm.SSO
+            text="Login with Google"
+            icon={
+              <Image
+                src="/google.png"
+                alt="Google logo"
+                width={20}
+                height={20}
+                className="self-center"
+              />
+            }
+            onClick={() => signUpWithSSO("google.com")}
+          />
+          <MyForm.SSO
+            text="Login with GitHub"
+            icon={
+              <Image
+                src="/github.png"
+                alt="GitHub logo"
+                width={20}
+                height={20}
+                className="self-center"
+              />
+            }
+            onClick={() => signUpWithSSO("github.com")}
+          />
+          <MyForm.ErrorMessage>{globalError}</MyForm.ErrorMessage>
         </MyForm.Card>
       </div>
     </>

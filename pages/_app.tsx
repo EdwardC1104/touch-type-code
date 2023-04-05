@@ -1,6 +1,6 @@
 import Layout from "components/Layout";
 import Transition from "components/Transition";
-import SessionProvider from "context/Session/SessionProvider";
+import { AuthContextProvider } from "context/Session/AuthContextProvider";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
@@ -34,13 +34,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         `,
         }}
       />
-      <SessionProvider>
+      <AuthContextProvider>
         <Layout>
           <Transition>
             <Component {...pageProps} />
           </Transition>
         </Layout>
-      </SessionProvider>
+      </AuthContextProvider>
     </>
   );
 }

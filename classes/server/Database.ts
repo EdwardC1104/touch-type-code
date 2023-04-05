@@ -14,6 +14,13 @@ class Database {
       driver: sqlite3.Database,
     });
 
+    console.warn(
+      "\x1b[41m",
+      "database.db accessed at",
+      new Date().toTimeString().slice(0, 8),
+      "\x1b[0m"
+    );
+
     await this.initialiseTables(db);
 
     return db;
@@ -437,7 +444,8 @@ class Database {
     const db = await this.open();
 
     const characters: Character[] = await db.all(
-      "SELECT * FROM characterTbl WHERE keyboardRow IS NOT NULL AND keyboardColumn IS NOT NULL"
+      // "SELECT * FROM characterTbl WHERE keyboardRow IS NOT NULL AND keyboardColumn IS NOT NULL"
+      "SELECT * FROM characterTbl"
     );
 
     await this.close(db);

@@ -1,5 +1,6 @@
 import { LinkedList } from "classes/client/LinkedList";
 import round from "helpers/shared/round";
+import uniqueArray from "helpers/shared/uniqueArray";
 import ContentNode, { ContentNodeData } from "./ContentNode";
 import { LetterState } from "./LetterState";
 
@@ -65,7 +66,9 @@ export default class LessonContent extends LinkedList<
   }
 
   public getIncorrectLettersForKeyboard(): string[] {
-    return this.getIncorrectLetters().map((node) => node.getLetterOnKeyboard());
+    return uniqueArray(
+      this.getIncorrectLetters().map((node) => node.getLetterOnKeyboard())
+    );
   }
 
   public getNumberIncorrect(): number {
@@ -86,7 +89,9 @@ export default class LessonContent extends LinkedList<
   }
 
   public getCorrectLettersForKeyboard(): string[] {
-    return this.getCorrectLetters().map((node) => node.getLetterOnKeyboard());
+    return uniqueArray(
+      this.getCorrectLetters().map((node) => node.getLetterOnKeyboard())
+    );
   }
 
   public getNumberCorrect(): number {

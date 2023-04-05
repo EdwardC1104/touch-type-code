@@ -1,10 +1,10 @@
-import usePath from "hooks/usePath";
+"use client";
+
+import usePathSegments from "hooks/usePathSegments";
 import Link from "next/link";
 
 const Breadcrumbs = () => {
-  const path = usePath();
-  // const segments = useSelectedLayoutSegments();
-  // console.log(segments);
+  const path = usePathSegments();
 
   return (
     <div>
@@ -14,9 +14,7 @@ const Breadcrumbs = () => {
           return (
             <span key={index}>
               <span className={isLast ? "font-bold" : ""}>
-                <Link href={link} legacyBehavior>
-                  {name}
-                </Link>
+                <Link href={link}>{name}</Link>
               </span>
               {isLast ? "" : " / "}
             </span>

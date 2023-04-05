@@ -4,52 +4,59 @@ interface Course {
   image: string;
 }
 
-interface UserData {
-  name: string;
-  username: string;
-  email: string;
-  passwordSalt: string;
-  passwordHash: string;
-}
+// interface UserData {
+//   name: string;
+//   username: string;
+//   email: string;
+//   passwordSalt: string;
+//   passwordHash: string;
+// }
 
-interface User extends UserData {
-  id: number;
-}
+// interface User extends UserData {
+//   id: number;
+// }
 
-interface UserSession {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-}
+// interface UserSession {
+//   id: number;
+//   name: string;
+//   username: string;
+//   email: string;
+// }
 
-interface LessonData {
-  name: string;
+// interface LessonData {
+
+//   name: number;
+//   description: string;
+//   background: string;
+//   // courseName: string;
+//   content: string;
+// }
+interface Lesson {
+  uid: string;
+
+  name: number;
   description: string;
   background: string;
-  courseName: string;
   content: string;
-}
-interface Lesson extends LessonData {
-  id: number;
 
   // Data stored in the user_lesson table
-  rating?: 0 | 1 | 2 | 3 | 4 | 5;
-  dateStarted?: string;
-  wpm?: number;
-  accuracy?: number;
+  // rating?: 0 | 1 | 2 | 3 | 4 | 5;
+  // dateStarted?: string;
+  // wpm?: number;
+  // accuracy?: number;
 }
 
 interface Character {
-  symbol: string;
-  keyboardRow: number;
-  keyboardColumn: number;
-  keyWidthMultipler?: number;
-  usesSpecialEnterShape: boolean;
-  keyTextPosition: "top" | "bottom" | null;
-  shift: "left" | "right" | null;
+  uid: string;
   finger: string | null;
-  isHidden: 0 | 1;
+  isHidden: boolean;
+  keyTextPosition: "top" | "bottom" | null;
+  keyWidthMultipler?: number;
+  keyboardColumn: number;
+  keyboardRow: number;
+  shift: "left" | "right" | null;
+  symbol: string;
+  usesSpecialEnterShape: boolean;
 }
 
 interface Key {

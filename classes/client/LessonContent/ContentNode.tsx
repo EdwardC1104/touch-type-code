@@ -1,4 +1,5 @@
 import { ListNode } from "classes/client/LinkedList";
+import fetchCharacter from "data/fetchCharacter";
 import type { LetterState } from "./LetterState";
 
 /**
@@ -142,32 +143,29 @@ export default class ContentNode extends ListNode<
    * Fetches the extra data about the letter from the server and sets it to the data object.
    */
   async setExtraLetterData() {
-    try {
-      const letterInUnicode = this.getLetterOnKeyboard(false).charCodeAt(0);
-      const res = await fetch(
-        `/api/lesson/getExtraLetterData/${letterInUnicode}`,
-        {
-          method: "GET",
-        }
-      );
+    let left = "L";
+    let right = "R";
+    let shiftKeyName = "no shift";
 
-      const {
-        finger: { left, right },
-        shift,
-      } = await res.json();
+    const character = await fetchCharacter(this.getLetterOnKeyboard(false));
 
-      this.data.fingerURL = {
-        left: `/hands/${left}.png`,
-        right: `/hands/${right}.png`,
-      };
-      this.data.shift = shift;
-    } catch (err) {
-      this.data.fingerURL = {
-        left: `/hands/L.png`,
-        right: `/hands/R.png`,
-      };
-      this.data.shift = "";
+    if (character) {
+      const { finger, shift } = character;
+
+      if (shift === "left") left = "L5";
+      if (shift === "right") right = "R5";
+      if (finger && finger.startsWith("L")) left = finger;
+      if (finger && finger.startsWith("R")) right = finger;
+
+      if (shift === "left") shiftKeyName = "lshift";
+      if (shift === "right") shiftKeyName = "rshift";
     }
+
+    this.data.fingerURL = {
+      left: `/hands/${left}.png`,
+      right: `/hands/${right}.png`,
+    };
+    this.data.shift = shiftKeyName;
   }
 
   /**
