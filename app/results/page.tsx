@@ -1,38 +1,34 @@
+"use client";
+
 import DataCard from "components/DataCard";
 import Keyboard from "components/Keyboard";
 import Rating from "components/Rating";
-import addColorsToKeyboardLayout from "helpers/client/addColorsToKeyboardLayout";
-import getBlankKeyboard from "helpers/server/getBlankKeyboard";
-import round from "helpers/shared/round";
+import addColorsToKeyboardLayout from "helpers/addColorsToKeyboardLayout";
+import getBlankKeyboard from "helpers/getBlankKeyboard";
+import round from "helpers/round";
 import Link from "next/link";
-
-interface SearchParams {
-  rating?: 0 | 1 | 2 | 3 | 4 | 5;
-  wpm?: string;
-  accuracy?: string;
-  incorrectKeys?: string[];
-  correctKeys?: string[];
-  lessonName?: string;
-  courseName?: string;
-}
+import { useSearchParams } from "next/navigation";
+import { use } from "react";
 
 /**
  * @Path /results
  */
-export default async function Results({
-  searchParams,
-}: {
-  searchParams?: SearchParams;
-}) {
-  const rating = searchParams?.rating ?? 0;
-  const wpm = searchParams?.wpm ?? "0";
-  const accuracy = parseInt(searchParams?.accuracy ?? "0");
-  const incorrectKeys: string[] = searchParams?.incorrectKeys ?? [];
-  const correctKeys: string[] = searchParams?.correctKeys ?? [];
-  const lessonName = searchParams?.lessonName ?? "";
-  const courseName = searchParams?.courseName ?? "";
+export default function Results() {
+  const searchParams = useSearchParams();
 
-  const keyboardLayout = await getBlankKeyboard();
+  const rating = parseInt(searchParams.get("rating") ?? "0");
+  const wpm = searchParams.get("wpm") ?? "0";
+  const accuracy = parseFloat(searchParams.get("accuracy") ?? "0");
+  const lessonName = searchParams.get("lessonName") ?? "";
+  const courseName = searchParams.get("courseName") ?? "";
+
+  let incorrectKeys: string[] | string =
+    searchParams.getAll("incorrectKeys") ?? [];
+  let correctKeys: string[] | string = searchParams.getAll("correctKeys") ?? [];
+  if (typeof incorrectKeys === "string") incorrectKeys = [incorrectKeys];
+  if (typeof correctKeys === "string") correctKeys = [correctKeys];
+
+  const keyboardLayout = use(getBlankKeyboard());
 
   const coloredKeyboardLayout = addColorsToKeyboardLayout(
     keyboardLayout,

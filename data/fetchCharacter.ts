@@ -7,10 +7,10 @@ const fetchCharacter = async (symbol: string) => {
   );
 
   const doc = querySnapshot.docs[0];
-  const data =
-    ({ ...doc?.data(), uid: doc.id } as Character | undefined) ?? null;
+  const data = doc?.data();
 
-  return data;
+  if (!data) return null;
+  return { ...data, uid: doc?.id } as Character;
 };
 
 export default fetchCharacter;

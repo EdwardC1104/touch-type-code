@@ -1,4 +1,4 @@
-import round from "helpers/shared/round";
+import round from "helpers/round";
 import { useEffect, useRef } from "react";
 
 const useWPM = () => {

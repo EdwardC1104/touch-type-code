@@ -4,33 +4,6 @@ interface Course {
   image: string;
 }
 
-// interface UserData {
-//   name: string;
-//   username: string;
-//   email: string;
-//   passwordSalt: string;
-//   passwordHash: string;
-// }
-
-// interface User extends UserData {
-//   id: number;
-// }
-
-// interface UserSession {
-//   id: number;
-//   name: string;
-//   username: string;
-//   email: string;
-// }
-
-// interface LessonData {
-
-//   name: number;
-//   description: string;
-//   background: string;
-//   // courseName: string;
-//   content: string;
-// }
 interface Lesson {
   uid: string;
 
@@ -38,12 +11,16 @@ interface Lesson {
   description: string;
   background: string;
   content: string;
+}
 
-  // Data stored in the user_lesson table
-  // rating?: 0 | 1 | 2 | 3 | 4 | 5;
-  // dateStarted?: string;
-  // wpm?: number;
-  // accuracy?: number;
+interface LessonResult {
+  uid: string;
+
+  accuracy: number;
+  dateStarted: string;
+  rating: 0 | 1 | 2 | 3 | 4 | 5;
+  wpm: number;
+  lesson: any;
 }
 
 interface Character {
@@ -59,6 +36,17 @@ interface Character {
   usesSpecialEnterShape: boolean;
 }
 
+interface CharacterResult {
+  uid: string;
+
+  averageTimeToType: number;
+  characterRef: any;
+  timesCorrect: number;
+  timesIncorrect: number;
+  symbol: string;
+  dateStarted: string;
+}
+
 interface Key {
   topCharacter: string;
   bottomCharacter: string;
@@ -66,3 +54,6 @@ interface Key {
   specialEnter?: boolean;
   color?: string;
 }
+
+interface LessonWithResult extends Partial<LessonResult>, Lesson {}
+interface ResultWithLesson extends LessonResult, Partial<Lesson> {}

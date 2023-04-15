@@ -1,4 +1,4 @@
-import toTitleCase from "helpers/shared/toTitleCase";
+import toTitleCase from "helpers/toTitleCase";
 import { usePathname } from "next/navigation";
 
 const usePathSegments = () => {

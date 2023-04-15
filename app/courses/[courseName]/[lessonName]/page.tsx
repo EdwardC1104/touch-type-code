@@ -1,6 +1,6 @@
-import OldTypingLesson from "components/TypingLesson/old";
+import TypingLesson from "components/TypingLesson";
 import fetchLesson from "data/fetchLesson";
-import getBlankKeyboard from "helpers/server/getBlankKeyboard";
+import getBlankKeyboard from "helpers/getBlankKeyboard";
 import { redirect } from "next/navigation";
 
 interface Props {
@@ -19,16 +19,12 @@ const Lesson = async ({ params: { courseName, lessonName } }: Props) => {
   if (!lessonData) return redirect(`/courses/${courseName}`);
 
   return (
-    <OldTypingLesson
+    <TypingLesson
       keyboardLayout={keyboardLayout}
       lesson={lessonData}
       courseName={courseName}
     />
   );
-
-  // return (
-  //   <TypingLesson keyboardLayout={keyboardLayout} lessonData={lessonData} />
-  // );
 };
 
 export default Lesson;

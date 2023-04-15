@@ -10,9 +10,11 @@ const fetchLesson = async (courseName: string, lessonName: string) => {
   );
 
   const doc = querySnapshot.docs[0];
-  const data = ({ ...doc?.data(), uid: doc.id } as Lesson | undefined) ?? null;
 
-  return data;
+  const data = doc?.data();
+
+  if (!data) return null;
+  return { ...data, uid: doc?.id } as Lesson;
 };
 
 export default fetchLesson;

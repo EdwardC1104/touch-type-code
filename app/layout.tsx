@@ -1,18 +1,28 @@
+import { AuthContextProvider } from "auth/context/AuthContextProvider";
 import NavgiationBar from "components/NavigationBar";
-import { AuthContextProvider } from "context/Session/AuthContextProvider";
+import Script from "next/script";
 import "styles/globals.scss";
 
 export const metadata = {
   title: "TouchTypeCode",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html className="dark" lang="en">
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=G-F5HW4V81ZG`}
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+        window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-F5HW4V81ZG');
+        `}
+      </Script>
       <body>
         <AuthContextProvider>
           <div className="top-level-div">
@@ -29,4 +39,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
