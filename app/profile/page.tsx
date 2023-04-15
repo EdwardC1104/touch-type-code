@@ -26,30 +26,35 @@ const Profile: NextPage = () => {
 
   const { displayName, email, photoURL } = user ?? {};
 
-  const profileImageURL = (photoURL || "").replace("s96-c", "s400-c");
+  const profileImageURL = (photoURL || "").replace("s96-c", "s800-c");
 
   return (
     <>
       <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
         <MyForm.Card>
-          <MyForm.Title>Profile</MyForm.Title>
-          <p>{displayName}</p>
-          <p>{email}</p>
-          <Image
-            src={profileImageURL}
-            width={90}
-            height={90}
-            alt="Profile Image"
-            className="rounded-full"
-          />
-
-          <button
-            type="button"
-            onClick={deleteAccount}
-            className="font-bold bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-xl text-center h-11 mt-2 mb-1 w-40"
-          >
-            Delete Account
-          </button>
+          <h1 className="font-bold text-2xl mb-4 text-center">{displayName}</h1>
+          <div className="flex align-center justify-center mb-4">
+            <Image
+              src={profileImageURL}
+              width={220}
+              height={220}
+              alt="Your profile image"
+              className="rounded-full"
+              quality={100}
+            />
+          </div>
+          <p className="text-neutral-400 text-sm font-medium mb-6 text-center">
+            {email}
+          </p>
+          <div className="flex align-center justify-center">
+            <button
+              type="button"
+              onClick={deleteAccount}
+              className="font-bold bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-xl text-center h-11 mb-1 w-40"
+            >
+              Delete Account
+            </button>
+          </div>
         </MyForm.Card>
       </div>
     </>
