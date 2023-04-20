@@ -113,7 +113,8 @@ class TypingLesson extends Component<Props, State> {
       keys,
     });
 
-    const data = new URL("/results");
+    const base = window.location.origin ?? "";
+    const data = new URL("/results", base);
     data.searchParams.set("wpm", wpm.toString());
     data.searchParams.set("accuracy", accuracy.toString());
     data.searchParams.set("rating", rating.toString());
