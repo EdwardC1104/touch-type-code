@@ -11,6 +11,14 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html className="dark" lang="en">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4109457006348021"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
+
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-F5HW4V81ZG"
@@ -25,6 +33,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           gtag('config', 'G-F5HW4V81ZG');
         `}
       </Script>
+
       <body>
         <AuthContextProvider>
           <div className="top-level-div">
