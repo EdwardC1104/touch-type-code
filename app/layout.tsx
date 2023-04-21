@@ -1,4 +1,5 @@
 import { AuthContextProvider } from "auth/context/AuthContextProvider";
+import CookiePopup from "components/CookiePopup";
 import NavgiationBar from "components/NavigationBar";
 import Script from "next/script";
 import "styles/globals.scss";
@@ -11,7 +12,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html className="dark" lang="en">
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=G-F5HW4V81ZG`}
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-F5HW4V81ZG"
         strategy="afterInteractive"
       />
       <Script id="google-analytics" strategy="afterInteractive">
@@ -34,6 +36,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 {/* </Transition> */}
               </div>
             </main>
+            <CookiePopup />
           </div>
         </AuthContextProvider>
       </body>

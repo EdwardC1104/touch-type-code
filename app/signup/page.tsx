@@ -5,6 +5,7 @@ import MyForm from "components/Form";
 import useGoTo from "hooks/useGoTo";
 import type { NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 /**
@@ -29,9 +30,21 @@ const Signup: NextPage = () => {
       <div className="flex justify-center items-center flex-auto flex-col sm:bg-transparent ">
         <MyForm.Card>
           <MyForm.Title>Sign up</MyForm.Title>
-          <MyForm.Subtitle>
-            Select the service you wish to sign up with.
-          </MyForm.Subtitle>
+          <p className="text-neutral-400 text-sm font-medium mb-6">
+            Select the service you wish to sign up with. By signing up, you
+            agree to our{" "}
+            <Link
+              href="/privacy/terms-and-conditions"
+              className="text-green-400"
+            >
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy/policy" className="text-green-400">
+              Privacy Policy
+            </Link>
+            .
+          </p>
           <MyForm.SSO
             text="Sign up with Google"
             icon={
