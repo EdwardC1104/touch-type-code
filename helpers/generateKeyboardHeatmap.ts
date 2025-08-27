@@ -63,7 +63,7 @@ const generateKeyboardHeatmap = async (userId: string) => {
   );
 
   // Calculate the mean and standard deviation of the times to type
-  const meanTime: number = mean(timesToType);
+  const meanTime: any = mean(timesToType);
   const standardDeviation = calcStandardDeviation(
     timesToType
   ) as unknown as number; // mathjs types are wrong - the correct type is "number | number[]"
@@ -84,7 +84,7 @@ const generateKeyboardHeatmap = async (userId: string) => {
   const keysMatrixFlat = flatten(keysMatrix);
 
   // Filter out the keys that are anomalous (index is in the list of anomalous keys)
-  const filteredKeys = filter(keysMatrixFlat, (_, index) => {
+  const filteredKeys = filter(keysMatrixFlat, (_, index: any) => {
     const keyNumber = Math.floor(index / 5);
     return !indexOfKeysToFilter.includes(keyNumber);
   }) as Matrix;
