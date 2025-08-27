@@ -7,7 +7,7 @@ import storeLessonResult from "data/storeLessonResult";
 import addColorsToKeyboardLayout from "helpers/addColorsToKeyboardLayout";
 import round from "helpers/round";
 import { withRouter } from "hooks/withRouter";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Component } from "react";
 
 interface Props {

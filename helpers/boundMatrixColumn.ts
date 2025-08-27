@@ -3,6 +3,7 @@ import {
   flatten,
   index,
   Matrix,
+  matrix,
   max,
   min,
   ones,
@@ -26,15 +27,19 @@ const boundMatrixColumn = (inputMatrix: Matrix, columnIndex: number) => {
   );
 
   // Get the minimum and maximum values in the column
-  const minimum = min(column);
-  const maximum = max(column);
+  const minimum: any = min(column);
+  const maximum: any = max(column);
 
   // The indexes of every value in the column to bound
   const indexesToBound = index(range(0, numberOfRows), columnIndex);
 
   // Create a matrix that will be used to subtract the minimum value from the column in the input matrix (to make the minimum value 0)
   let adderMatrix = zeros(inputMatrix.size());
-  const adderReplacement = Array(numberOfRows).fill(minimum);
+  const adderReplacement = matrix(
+    Array(numberOfRows)
+      .fill(minimum)
+      .map((val) => [val])
+  );
   adderMatrix = subset(adderMatrix, indexesToBound, adderReplacement);
 
   // Subtract the minimum value from the column in input matrix
@@ -45,7 +50,11 @@ const boundMatrixColumn = (inputMatrix: Matrix, columnIndex: number) => {
 
   // Create a matrix that will be used to multiply the column in the input matrix (to make the maximum value 1)
   let multiplierMatrix = ones(inputMatrix.size());
-  const multiplierReplacement = Array(numberOfRows).fill(boundMultiplier);
+  const multiplierReplacement = matrix(
+    Array(numberOfRows)
+      .fill(boundMultiplier)
+      .map((val) => [val])
+  );
   multiplierMatrix = subset(
     multiplierMatrix,
     indexesToBound,
