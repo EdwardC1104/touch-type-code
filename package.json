@@ -9,28 +9,23 @@
     "lint": "next lint",
     "test:unit": "jest unit",
     "test:e2e": "playwright test --headed --workers=1",
-    "test": "pnpm run test:unit && pnpm run test:e2e"
+    "test": "npm run test:unit && npm run test:e2e"
   },
   "dependencies": {
-    "cookie": "^1.0.2",
     "cookies-next": "^2.1.1",
     "dayjs": "^1.11.14",
     "dotenv": "^17.2.1",
+    "encoding": "^0.1.13",
     "firebase": "^9.23.0",
     "formik": "^2.4.6",
     "framer-motion": "^12.23.12",
-    "jsonwebtoken": "^9.0.2",
     "mathjs": "^14.6.0",
     "next": "13.5.7",
-    "pnpm": "^10.15.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^3.1.2",
-    "sass": "^1.91.0",
-    "sharp": "^0.34.3",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sass": "^1.91.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
